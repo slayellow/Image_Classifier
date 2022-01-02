@@ -43,5 +43,5 @@ class ImageNet:
                           pin_memory=True, sampler=None)
 
     def get_valid_loader(self, shuffle=False, batch_size=2, num_worker=0):
-        return DataLoader(self.train_dataset, batch_size=batch_size, shuffle=shuffle, num_workers=num_worker,
+        return DataLoader(self.valid_dataset, batch_size=batch_size, shuffle=shuffle, num_workers=num_worker,
                           pin_memory=True, sampler=None)
