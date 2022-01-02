@@ -35,7 +35,7 @@ class ImageClassifier:
         self.get_print_line()
         self.get_print_request("Select Training Folder Path")
         train_path = filedialog.askdirectory(parent=root, initialdir="/", title="Please Select A Train Data Folder")
-        if train_path == "":
+        if train_path == "" or train_path == ():
             self.get_print_fail("Not Select Training Folder Path!")
             self.get_print_fail("Please Restart SW Now!!")
             self.get_print_line()
@@ -46,7 +46,7 @@ class ImageClassifier:
         self.get_print_line()
         self.get_print_request("Select Validation Folder Path")
         valid_path = filedialog.askdirectory(parent=root, initialdir="/", title="Please Select A Valid Data Folder")
-        if valid_path == "":
+        if valid_path == "" or valid_path == ():
             self.get_print_fail("Not Select Validation Folder Path!")
             self.get_print_fail("Please Restart SW Now!!")
             self.get_print_line()
