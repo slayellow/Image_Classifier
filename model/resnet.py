@@ -109,12 +109,12 @@ class ResNet(nn.Module):
 
         # Block
         self.layer1 = self._make_layer(block, channels[0], blocks[layer_num][0])
-        self.layer2 = self._make_layer(block, channels[0], blocks[layer_num][1], stride=2)
-        self.layer3 = self._make_layer(block, channels[0], blocks[layer_num][2], stride=2)
-        self.layer4 = self._make_layer(block, channels[0], blocks[layer_num][3], stride=2)
+        self.layer2 = self._make_layer(block, channels[1], blocks[layer_num][1], stride=2)
+        self.layer3 = self._make_layer(block, channels[2], blocks[layer_num][2], stride=2)
+        self.layer4 = self._make_layer(block, channels[3], blocks[layer_num][3], stride=2)
 
         self.avgpool = nn.AvgPool2d(7, stride=1)
-        self.fc = nn.Linear(512 * block.expansion, num_classes)
+        self.fc = nn.Linear(channels[3] * block.expansion, num_classes)
 
         # Initialize Weight
         for m in self.modules():
