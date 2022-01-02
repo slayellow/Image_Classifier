@@ -66,12 +66,12 @@ class ImageClassifier:
         self.get_print_line()
         self.get_print_request("Please enter the batch size!")
         self.get_print_request("Batch Size :")
-        batch_size = map(int, input())
+        batch_size = int(input())
         self.get_print_line()
         self.get_print_line()
         self.get_print_request("Please enter the num_worker size!")
         self.get_print_request("Number of Worker Size : ")
-        num_worker = map(int, input())
+        num_worker = int(input())
         self.get_print_line()
         self.get_print_line()
         self.train_loader = self.dataset.get_train_loader(batch_size=batch_size, num_worker=num_worker)
@@ -83,7 +83,7 @@ class ImageClassifier:
         self.get_print_line()
         self.get_print_request("Please enter the number")
         self.get_print_request("0 : ResNet-18, 1 : ResNet-34, 2 : ResNet-50, 3: ResNet-101, 4 : ResNet-152")
-        number = map(int, input())
+        number = int(input())
         if number == 0:
             self.model = resnet(18, 1000, False, None)
         elif number == 1:
@@ -129,24 +129,24 @@ class ImageClassifier:
         self.get_print_line()
         self.get_print_request("Please enter the learning rate!")
         self.get_print_request("Learning Rate : ")
-        self.learning_rate = map(float, input())
+        self.learning_rate = float(input())
         self.get_print_line()
 
         self.get_print_line()
         self.get_print_request("Please enter the momentum!")
         self.get_print_request("Momentum : ")
-        momentum = map(float, input())
+        momentum = float(input())
         self.get_print_line()
 
         self.get_print_line()
         self.get_print_request("Please enter the weight_decay")
         self.get_print_request("Weight Decay : ")
-        weight_decay = map(float, input())
+        weight_decay = float(input())
 
         self.get_print_line()
         self.get_print_request("Please enter the number")
         self.get_print_request("0 : SGD, 1 : Adam, 2 : AdaGrad, 3 : RMSProp")
-        number = map(int, input())
+        number = int(input())
         if number == 0:
             self.optimizer = optim.SGD(self.model.parameters(), lr=self.learning_rate, momentum=momentum,
                                        weight_decay=weight_decay)
@@ -197,7 +197,7 @@ class ImageClassifier:
         self.get_print_line()
         self.get_print_request("Please enter the epoch")
         self.get_print_request("Epoch : ")
-        total_epcoh = map(int, input())
+        total_epcoh = int(input())
 
         self.get_print_line()
         self.get_print_info("Train Start!")
