@@ -1,5 +1,6 @@
 from data.dataset import ImageNet
 from model.resnet import *
+from model.vggnet import *
 from utils.color import *
 from utils.helper import *
 import tkinter
@@ -82,7 +83,8 @@ class ImageClassifier:
     def set_model(self):
         self.get_print_line()
         self.get_print_request("Please enter the number")
-        self.get_print_request("0 : ResNet-18, 1 : ResNet-34, 2 : ResNet-50, 3: ResNet-101, 4 : ResNet-152")
+        self.get_print_request("0 : ResNet-18, 1 : ResNet-34, 2 : ResNet-50, 3 : ResNet-101, 4 : ResNet-152")
+        self.get_print_request("5 : VGGNet-11, 6 : VGGNet-13, 7 : VGGNet-16, 8 : VGGNet-19")
         number = int(input())
         if number == 0:
             self.model = resnet(18, 1000, False, None)
@@ -94,6 +96,14 @@ class ImageClassifier:
             self.model = resnet(101, 1000, False, None)
         elif number == 4:
             self.model = resnet(152, 1000, False, None)
+        elif number == 5:
+            self.model = vggnet(11, 1000, False, False, None)
+        elif number == 6:
+            self.model = vggnet(13, 1000, False, False, None)
+        elif number == 7:
+            self.model = vggnet(16, 1000, False, False, None)
+        elif number == 8:
+            self.model = vggnet(19, 1000, False, False, None)
         else:
             self.get_print_fail("Not Corret Number!")
             self.get_print_fail("Please Restart SW Now!!")
