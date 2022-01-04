@@ -49,6 +49,9 @@ class VGGNet(nn.Module):
         x = self.classifier(x)
         return x
 
+    def get_name(self):
+        return self.model_name
+
     def _initialize_weights(self):
         for m in self.modules():
             if isinstance(m, nn.Conv2d):
