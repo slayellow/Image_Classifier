@@ -25,8 +25,10 @@ class ImageClassifier:
         self.optimizer = None
         self.learning_rate = 0
         self.best_prec1 = 0
-        self.training_loss = list()
-        self.validation_loss = list()
+        self.training_accuracy_top1 = list()
+        self.training_accuracy_top5 = list()
+        self.validation_accuracy_top1 = list()
+        self.validation_accuracy_top5 = list()
 
     def load_dataset(self):
         root = tkinter.Tk()
@@ -215,7 +217,7 @@ class ImageClassifier:
         for epoch in range(start_epoch, total_epcoh):
             self.get_print_line()
             lr = adjust_learning_rate(self.optimizer, epoch, self.learning_rate)
-            self.get_print_info("Training Epoch {} Start!".format(epoch+1))
+            self.get_print_info("Training Epoch {} Start!".format(epoch + 1))
             self.get_print_info("Current Learning Rate : {}".format(lr))
             self.get_print_line()
 
@@ -238,7 +240,7 @@ class ImageClassifier:
                 'optimizer': self.optimizer.state_dict()
             }, is_best, './Log/' + self.model.get_name() + ".pth")
             self.get_print_line()
-            self.get_print_info("Epoch {} Save CheckPoint!!".format(epoch+1))
+            self.get_print_info("Epoch {} Save CheckPoint!!".format(epoch + 1))
             self.get_print_line()
 
     def train_per_epoch(self, train_loader, model, criterion, optimizer, epoch, print_freq):
@@ -285,7 +287,8 @@ class ImageClassifier:
                                     "Prec@5 {top5.val:.3f} ({top5.avg:.3f})\t".format(
                     epoch + 1, i, len(train_loader), batch_time=batch_time,
                     data_time=data_time, loss=losses, top1=top1, top5=top5))
-        self.training_loss.append(losses.avg)
+        self.training_accuracy_top1.append(top1.avg)
+        self.training_accuracy_top5.append(top5.avg)
 
     def validate(self, val_loader, model, criterion, print_freq):
         batch_time = AverageMeter()
@@ -316,43 +319,50 @@ class ImageClassifier:
                 end = time.time()
 
                 if i % print_freq == 0:
-                    self.get_print_info('Test: [{0}/{1}]\t'
-                                        'Time {batch_time.val:.3f} ({batch_time.avg:.3f})\t'
-                                        'Loss {loss.val:.4f} ({loss.avg:.4f})\t'
-                                        'Prec@1 {top1.val:.3f} ({top1.avg:.3f})\t'
-                                        'Prec@5 {top5.val:.3f} ({top5.avg:.3f})'.format(
+                    self.get_print_warning('Test: [{0}/{1}]\t'
+                                           'Time {batch_time.val:.3f} ({batch_time.avg:.3f})\t'
+                                           'Loss {loss.val:.4f} ({loss.avg:.4f})\t'
+                                           'Prec@1 {top1.val:.3f} ({top1.avg:.3f})\t'
+                                           'Prec@5 {top5.val:.3f} ({top5.avg:.3f})'.format(
                         i, len(val_loader), batch_time=batch_time, loss=losses,
                         top1=top1, top5=top5))
 
         self.get_print_info(f' * Prec@1 {top1.avg:.3f} Prec@5 {top5.avg:.3f}')
-        self.validation_loss.append(losses.avg)
+        self.validation_accuracy_top1.append(top1.avg)
+        self.validation_accuracy_top5.append(top5.avg)
         return top1.avg, top5.avg
 
     def visualization_loss_graph(self):
         self.get_print_line()
         self.get_print_info("Plot Loss Graph")
         self.get_print_line()
-        train_loss = np.array(self.training_loss)
-        valid_loss = np.array(self.validation_loss)
-        train_x = np.arange(train_loss.shape[0])
-        valid_x = np.arange(valid_loss.shape[0])
+        train_top1 = np.array(self.training_accuracy_top1)
+        train_top5 = np.array(self.training_accuracy_top5)
+        valid_top1 = np.array(self.validation_accuracy_top1)
+        valid_top5 = np.array(self.validation_accuracy_top5)
+        train_x = np.arange(train_top5.shape[0])
+        valid_x = np.arange(valid_top5.shape[0])
 
         self.get_print_line()
         fig, ax = plt.subplots(figsize=(12, 8))
-        plt.plot(train_x, train_loss, 'r', label="Training Loss")
+        plt.plot(train_x, train_top1, 'r', label="Training Accuracy Top 1 : {}".format(train_top1[-1]))
+        plt.plot(train_x, train_top5, 'g', label="Training Accuracy Top 5 : {}".format(train_top5[-1]))
         plt.xlabel("Epochs", size=12)
         plt.ylabel("Average Loss", size=12)
         plt.title("Training Loss per Epoch", size=15)
+        plt.legend()
         plt.savefig("training_loss.png")
         self.get_print_info("Traiing Loss Graph Save Finish!")
         self.get_print_line()
 
         self.get_print_line()
         fig, ax = plt.subplots(figsize=(12, 8))
-        plt.plot(valid_x, valid_loss, 'r', label="Validation Loss")
+        plt.plot(valid_x, valid_top1, 'r', label="Validation Accuracy Top 1 : {}".format(valid_top1[-1]))
+        plt.plot(valid_x, valid_top5, 'g', label="Validation Accuracy Top 5 : {}".format(valid_top5[-1]))
         plt.xlabel("Epochs", size=12)
         plt.ylabel("Average Loss", size=12)
         plt.title("Validation Loss per Epoch", size=15)
+        plt.legend()
         plt.savefig("validation_loss.png")
         self.get_print_info("Validation Loss Graph Save Finish!")
         self.get_print_line()
