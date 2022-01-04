@@ -40,9 +40,10 @@ CMD창에서 모든 작업이 이루어지며 입력값을 받아서 학습을 �
 
 ## 1. ResNet-18
 
-Training
-  Top-1 Accuracy : 70.934%
-  Top-5 Accuracy : 88.390%
-Validation
-  Top-1 Accuracy : 70.436%
-  Top-5 Accuracy : 89.678%
+Training  
+  Top-1 Accuracy : 70.934%  
+  Top-5 Accuracy : 88.390%  
+
+Validation  
+  Top-1 Accuracy : 70.436%  
+  Top-5 Accuracy : 89.678%  
