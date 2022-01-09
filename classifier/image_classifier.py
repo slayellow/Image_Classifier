@@ -2,6 +2,8 @@ from data.dataset import ImageNet
 from model.resnet import *
 from model.vggnet import *
 from model.densenet import *
+from model.preactivation_resnet import *
+from model.resnext import *
 from utils.color import *
 from utils.helper import *
 import tkinter
@@ -89,6 +91,9 @@ class ImageClassifier:
         self.get_print_request("0 : ResNet-18, 1 : ResNet-34, 2 : ResNet-50, 3 : ResNet-101, 4 : ResNet-152")
         self.get_print_request("5 : VGGNet-11, 6 : VGGNet-13, 7 : VGGNet-16, 8 : VGGNet-19")
         self.get_print_request("9 : DenseNet-121, 10 : DenseNet-169, 11 : DenseNet-201, 12 : DenseNet-264")
+        self.get_print_request("13 : Pre-ResNet-18, 14 : Pre-ResNet-34, 15 : Pre-ResNet-50, 16 : Pre-ResNet-101, "
+                               "17 : Pre-ResNet-152")
+        self.get_print_request("18 : ResNeXt-50, 19 : ResNeXt-101, 20 : ResNeXt-152")
         number = int(input())
         if number == 0:
             self.model = resnet(18, 1000, False, None)
@@ -116,6 +121,22 @@ class ImageClassifier:
             self.model = densenet(201, 1000, False, None)
         elif number == 12:
             self.model = densenet(264, 1000, False, None)
+        elif number == 13:
+            self.model = preactivation_resnet(18, 1000, False, None)
+        elif number == 14:
+            self.model = preactivation_resnet(34, 1000, False, None)
+        elif number == 15:
+            self.model = preactivation_resnet(50, 1000, False, None)
+        elif number == 16:
+            self.model = preactivation_resnet(101, 1000, False, None)
+        elif number == 17:
+            self.model = preactivation_resnet(152, 1000, False, None)
+        elif number == 18:
+            self.model = resnext(50, 1000, False, None)
+        elif number == 19:
+            self.model = resnext(101, 1000, False, None)
+        elif number == 20:
+            self.model = resnext(152, 1000, False, None)
         else:
             self.get_print_fail("Not Corret Number!")
             self.get_print_fail("Please Restart SW Now!!")
