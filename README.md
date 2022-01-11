@@ -35,6 +35,14 @@ CMD창에서 모든 작업이 이루어지며 입력값을 받아서 학습을 �
 
 7. 결과확인하기
 
+# 사용 가능한 모델
+1. ResNet
+2. VGGNet
+3. DenseNet
+4. pre-activation ResNet
+5. ResNeXt
+6. RoR
+
 
 # Training Result
 
@@ -47,3 +55,7 @@ Training
 Validation  
   Top-1 Accuracy : 70.436%  
   Top-5 Accuracy : 89.678%  
+  
+  
+  
+
