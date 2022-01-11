@@ -2,6 +2,7 @@ from data.dataset import ImageNet
 from model.resnet import *
 from model.vggnet import *
 from model.densenet import *
+from model.ror import *
 from model.preactivation_resnet import *
 from model.resnext import *
 from utils.color import *
@@ -94,6 +95,7 @@ class ImageClassifier:
         self.get_print_request("13 : Pre-ResNet-18, 14 : Pre-ResNet-34, 15 : Pre-ResNet-50, 16 : Pre-ResNet-101, "
                                "17 : Pre-ResNet-152")
         self.get_print_request("18 : ResNeXt-50, 19 : ResNeXt-101, 20 : ResNeXt-152")
+        self.get_print_request("21 : RoR3-18, 22 : RoR3-34, 23 : RoR3-50, 24 : RoR3-101, 25 : RoR3-152")
         number = int(input())
         if number == 0:
             self.model = resnet(18, 1000, False, None)
@@ -137,6 +139,16 @@ class ImageClassifier:
             self.model = resnext(101, 1000, False, None)
         elif number == 20:
             self.model = resnext(152, 1000, False, None)
+        elif number == 21:
+            self.model = ror(18, 1000, False, None)
+        elif number == 22:
+            self.model = ror(34, 1000, False, None)
+        elif number == 23:
+            self.model = ror(50, 1000, False, None)
+        elif number == 24:
+            self.model = ror(101, 1000, False, None)
+        elif number == 25:
+            self.model = ror(152, 1000, False, None)
         else:
             self.get_print_fail("Not Corret Number!")
             self.get_print_fail("Please Restart SW Now!!")
