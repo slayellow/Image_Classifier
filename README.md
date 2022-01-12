@@ -55,7 +55,15 @@ Training
 Validation  
   Top-1 Accuracy : 70.436%  
   Top-5 Accuracy : 89.678%  
-  
-  
+
+## 2. pre-activation ResNet-18
+
+Training  
+  Top-1 Accuracy : 70.171%  
+  Top-5 Accuracy : 88.281%  
+
+Validation  
+  Top-1 Accuracy : 69.638%  
+  Top-5 Accuracy : 89.064%  
   
 
