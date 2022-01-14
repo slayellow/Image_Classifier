@@ -22,7 +22,7 @@ import matplotlib.pyplot as plt
 class ImageClassifier:
 
     def __init__(self):
-        self.learning_rate_scheduler = one
+        self.learning_rate_scheduler = None
         self.dev = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
         self.dataset = None
         self.train_loader = None
