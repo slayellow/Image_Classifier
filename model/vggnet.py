@@ -86,5 +86,5 @@ def make_layers(cfg, batch_norm=False):
 def vggnet(layer_num, classes, bn=False, pretrained=False, pretrained_path=None):
     model = VGGNet(layer_num=layer_num, num_classes=classes, batch_normalization=bn)
     if pretrained:
-        model.load_state_dict(torch.load(os.path.join(pretrained_path, model.get_name())))
+        model.load_state_dict(torch.load(pretrained_path)['state_dict'])
     return model

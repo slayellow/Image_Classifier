@@ -95,7 +95,7 @@ class DenseNet(nn.Module):
 def densenet(layer_num, classes, pretrained=False, pretrained_path=None):
     model = DenseNet(layer_num=layer_num, num_classes=classes)
     if pretrained:
-        model.load_state_dict(torch.load(os.path.join(pretrained_path, model.get_name())))
+        model.load_state_dict(torch.load(pretrained_path)['state_dict'])
     return model
 
 

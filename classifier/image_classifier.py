@@ -30,6 +30,8 @@ class ImageClassifier:
         self.model = None
         self.criterion = None
         self.optimizer = None
+        self.pretrained_path = None
+        self.b_pretrained = False
         self.learning_rate = 0
         self.best_prec1 = 0
         self.training_accuracy_top1 = list()
@@ -72,6 +74,18 @@ class ImageClassifier:
         self.get_print_info("Load ImageNet Dataset Finish!!")
         self.get_print_line()
 
+        self.get_print_line()
+        self.get_print_request("Select Pretrained Model File")
+        pretrained_path = filedialog.askopenfilename(parent=root, initialdir="/", title="Please Select Pretrained Model File!")
+        if pretrained_path == "" or pretrained_path == ():
+            self.get_print_fail("Not Select Pretrained Model File!")
+            self.get_print_line()
+        else:
+            self.pretrained_path = pretrained_path
+            self.b_pretrained = True
+            self.get_print_fail("Pretrained File : {}".format(self.pretrained_path))
+            self.get_print_line()
+        self.get_print_line()
     def set_dataset_detail(self):
         self.get_print_line()
         self.get_print_request("Please enter the batch size!")
@@ -102,67 +116,67 @@ class ImageClassifier:
         self.get_print_request("26 : ConvNeXt-T, 27 : ConvNeXt-S, 28 : ConvNeXt-B, 29 : ConvNeXt-L, 30 : ConvNeXt-XL")
         number = int(input())
         if number == 0:
-            self.model = resnet(18, 1000, False, None)
+            self.model = resnet(18, 1000, self.b_pretrained, self.pretrained_path)
         elif number == 1:
-            self.model = resnet(34, 1000, False, None)
+            self.model = resnet(34, 1000, self.b_pretrained, self.pretrained_path)
         elif number == 2:
-            self.model = resnet(50, 1000, False, None)
+            self.model = resnet(50, 1000, self.b_pretrained, self.pretrained_path)
         elif number == 3:
-            self.model = resnet(101, 1000, False, None)
+            self.model = resnet(101, 1000, self.b_pretrained, self.pretrained_path)
         elif number == 4:
-            self.model = resnet(152, 1000, False, None)
+            self.model = resnet(152, 1000, self.b_pretrained, self.pretrained_path)
         elif number == 5:
-            self.model = vggnet(11, 1000, False, False, None)
+            self.model = vggnet(11, 1000, False, self.b_pretrained, self.pretrained_path)
         elif number == 6:
-            self.model = vggnet(13, 1000, False, False, None)
+            self.model = vggnet(13, 1000, False, self.b_pretrained, self.pretrained_path)
         elif number == 7:
-            self.model = vggnet(16, 1000, False, False, None)
+            self.model = vggnet(16, 1000, False, self.b_pretrained, self.pretrained_path)
         elif number == 8:
-            self.model = vggnet(19, 1000, False, False, None)
+            self.model = vggnet(19, 1000, False, self.b_pretrained, self.pretrained_path)
         elif number == 9:
-            self.model = densenet(121, 1000, False, None)
+            self.model = densenet(121, 1000, self.b_pretrained, self.pretrained_path)
         elif number == 10:
-            self.model = densenet(169, 1000, False, None)
+            self.model = densenet(169, 1000, self.b_pretrained, self.pretrained_path)
         elif number == 11:
-            self.model = densenet(201, 1000, False, None)
+            self.model = densenet(201, 1000, self.b_pretrained, self.pretrained_path)
         elif number == 12:
-            self.model = densenet(264, 1000, False, None)
+            self.model = densenet(264, 1000, self.b_pretrained, self.pretrained_path)
         elif number == 13:
-            self.model = preactivation_resnet(18, 1000, False, None)
+            self.model = preactivation_resnet(18, 1000, self.b_pretrained, self.pretrained_path)
         elif number == 14:
-            self.model = preactivation_resnet(34, 1000, False, None)
+            self.model = preactivation_resnet(34, 1000, self.b_pretrained, self.pretrained_path)
         elif number == 15:
-            self.model = preactivation_resnet(50, 1000, False, None)
+            self.model = preactivation_resnet(50, 1000, self.b_pretrained, self.pretrained_path)
         elif number == 16:
-            self.model = preactivation_resnet(101, 1000, False, None)
+            self.model = preactivation_resnet(101, 1000, self.b_pretrained, self.pretrained_path)
         elif number == 17:
-            self.model = preactivation_resnet(152, 1000, False, None)
+            self.model = preactivation_resnet(152, 1000, self.b_pretrained, self.pretrained_path)
         elif number == 18:
-            self.model = resnext(50, 1000, False, None)
+            self.model = resnext(50, 1000, self.b_pretrained, self.pretrained_path)
         elif number == 19:
-            self.model = resnext(101, 1000, False, None)
+            self.model = resnext(101, 1000, self.b_pretrained, self.pretrained_path)
         elif number == 20:
-            self.model = resnext(152, 1000, False, None)
+            self.model = resnext(152, 1000, self.b_pretrained, self.pretrained_path)
         elif number == 21:
-            self.model = ror(18, 1000, False, None)
+            self.model = ror(18, 1000, self.b_pretrained, self.pretrained_path)
         elif number == 22:
-            self.model = ror(34, 1000, False, None)
+            self.model = ror(34, 1000, self.b_pretrained, self.pretrained_path)
         elif number == 23:
-            self.model = ror(50, 1000, False, None)
+            self.model = ror(50, 1000, self.b_pretrained, self.pretrained_path)
         elif number == 24:
-            self.model = ror(101, 1000, False, None)
+            self.model = ror(101, 1000, self.b_pretrained, self.pretrained_path)
         elif number == 25:
-            self.model = ror(152, 1000, False, None)
+            self.model = ror(152, 1000, self.b_pretrained, self.pretrained_path)
         elif number == 26:
-            self.model = convnext('T', 1000, False, None)
+            self.model = convnext('T', 1000, self.b_pretrained, self.pretrained_path)
         elif number == 27:
-            self.model = convnext('S', 1000, False, None)
+            self.model = convnext('S', 1000, self.b_pretrained, self.pretrained_path)
         elif number == 28:
-            self.model = convnext('B', 1000, False, None)
+            self.model = convnext('B', 1000, self.b_pretrained, self.pretrained_path)
         elif number == 29:
-            self.model = convnext('L', 1000, False, None)
+            self.model = convnext('L', 1000, self.b_pretrained, self.pretrained_path)
         elif number == 30:
-            self.model = convnext('XL', 1000, False, None)
+            self.model = convnext('XL', 1000, self.b_pretrained, self.pretrained_path)
         else:
             self.get_print_fail("Not Corret Number!")
             self.get_print_fail("Please Restart SW Now!!")
@@ -269,7 +283,7 @@ class ImageClassifier:
                 start_epoch = checkpoint['epoch']
                 best_prec1 = checkpoint['best_prec1']
                 self.model.load_state_dict(checkpoint['state_dict'])
-                self.model.load_state_dict(checkpoint['optimizer'])
+                self.optimizer.load_state_dict(checkpoint['optimizer'])
                 self.get_print_info("Load the Pretrained Model!")
             else:
                 self.get_print_info("Don't Exist Pretrained Model!")
