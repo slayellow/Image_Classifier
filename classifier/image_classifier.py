@@ -5,8 +5,10 @@ from model.densenet import *
 from model.ror import *
 from model.preactivation_resnet import *
 from model.resnext import *
+from model.convnext import *
 from utils.color import *
 from utils.helper import *
+from model.utils.labelsmoothingcrossentropy import *
 import tkinter
 from tkinter import filedialog
 import torchinfo
@@ -20,6 +22,7 @@ import matplotlib.pyplot as plt
 class ImageClassifier:
 
     def __init__(self):
+        self.learning_rate_scheduler = one
         self.dev = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
         self.dataset = None
         self.train_loader = None
@@ -96,6 +99,7 @@ class ImageClassifier:
                                "17 : Pre-ResNet-152")
         self.get_print_request("18 : ResNeXt-50, 19 : ResNeXt-101, 20 : ResNeXt-152")
         self.get_print_request("21 : RoR3-18, 22 : RoR3-34, 23 : RoR3-50, 24 : RoR3-101, 25 : RoR3-152")
+        self.get_print_request("26 : ConvNeXt-T, 27 : ConvNeXt-S, 28 : ConvNeXt-B, 29 : ConvNeXt-L, 30 : ConvNeXt-XL")
         number = int(input())
         if number == 0:
             self.model = resnet(18, 1000, False, None)
@@ -149,6 +153,16 @@ class ImageClassifier:
             self.model = ror(101, 1000, False, None)
         elif number == 25:
             self.model = ror(152, 1000, False, None)
+        elif number == 26:
+            self.model = convnext('T', 1000, False, None)
+        elif number == 27:
+            self.model = convnext('S', 1000, False, None)
+        elif number == 28:
+            self.model = convnext('B', 1000, False, None)
+        elif number == 29:
+            self.model = convnext('L', 1000, False, None)
+        elif number == 30:
+            self.model = convnext('XL', 1000, False, None)
         else:
             self.get_print_fail("Not Corret Number!")
             self.get_print_fail("Please Restart SW Now!!")
@@ -172,8 +186,19 @@ class ImageClassifier:
     def set_loss(self):
         self.get_print_line()
         self.get_print_info("Set Loss Function")
-        self.criterion = nn.CrossEntropyLoss().to(self.dev)
-        self.get_print_info("CrossEntroyLoss Setting Finish!!")
+        self.get_print_request("Please enter the number")
+        self.get_print_request("0 : CrossEntropyLoss, 1 : LabelSmoothingCrossEntropy")
+        number = int(input())
+        if number == 0:
+            self.criterion = nn.CrossEntropyLoss().to(self.dev)
+            self.get_print_response("You Select Cross Entropy Loss")
+        elif number == 1:
+            self.get_print_response("You Select Label Smoothing Cross Entropy Loss")
+            self.get_print_request("Please enter the Label Smoothing Rate")
+            smooth_rate = int(input())
+            self.criterion = LabelSmoothingCrossEntropy(smoothing=smooth_rate).to(self.dev)
+            self.get_print_response("Label Smoothing Cross Entropy Loss -> Smooth Rate : {}".format(smooth_rate))
+        self.get_print_info("Loss Function Setting Finish!!")
         self.get_print_line()
 
     def set_optimizer(self):
@@ -200,7 +225,7 @@ class ImageClassifier:
 
         self.get_print_line()
         self.get_print_request("Please enter the number")
-        self.get_print_request("0 : SGD, 1 : Adam, 2 : AdaGrad, 3 : RMSProp")
+        self.get_print_request("0 : SGD, 1 : Adam, 2 : AdaGrad, 3 : RMSProp, 4 : AdamW")
         number = int(input())
         if number == 0:
             self.optimizer = optim.SGD(self.model.parameters(), lr=self.learning_rate, momentum=momentum,
@@ -218,8 +243,12 @@ class ImageClassifier:
         elif number == 3:
             self.optimizer = optim.RMSprop(self.model.parameters(), lr=self.learning_rate, momentum=momentum,
                                            weight_decay=weight_decay)
-            self.get_print_response("You Select Adam -> Learning Rate : {}, Momentum : {}, Weight Decay : {}".format(
+            self.get_print_response("You Select RMSProp -> Learning Rate : {}, Momentum : {}, Weight Decay : {}".format(
                 self.learning_rate, momentum, weight_decay))
+        elif number == 4:
+            self.optimizer = optim.AdamW(self.model.parameters(), lr=self.learning_rate, weight_decay=weight_decay)
+            self.get_print_response("You Select AdamW -> Learning Rate : {}, Weight Decay : {}".format(
+                self.learning_rate, weight_decay))
         else:
             self.get_print_fail("Not Corret Number!")
             self.get_print_fail("Please Restart SW Now!!")
