@@ -209,7 +209,7 @@ class ImageClassifier:
         elif number == 1:
             self.get_print_response("You Select Label Smoothing Cross Entropy Loss")
             self.get_print_request("Please enter the Label Smoothing Rate")
-            smooth_rate = int(input())
+            smooth_rate = float(input())
             self.criterion = LabelSmoothingCrossEntropy(smoothing=smooth_rate).to(self.dev)
             self.get_print_response("Label Smoothing Cross Entropy Loss -> Smooth Rate : {}".format(smooth_rate))
         self.get_print_info("Loss Function Setting Finish!!")
