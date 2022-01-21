@@ -66,4 +66,12 @@ Validation
   Top-1 Accuracy : 69.638%  
   Top-5 Accuracy : 89.064%  
   
+## 3. VGGNet-16
 
+Training  
+  Top-1 Accuracy : 67.018%  
+  Top-5 Accuracy : 86.317%  
+
+Validation  
+  Top-1 Accuracy : 70.842%  
+  Top-5 Accuracy : 89.922%  
