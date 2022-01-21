@@ -126,13 +126,13 @@ class ImageClassifier:
         elif number == 4:
             self.model = resnet(152, 1000, self.b_pretrained, self.pretrained_path)
         elif number == 5:
-            self.model = vggnet(11, 1000, False, self.b_pretrained, self.pretrained_path)
+            self.model = vggnet(11, 1000, self.b_pretrained, self.pretrained_path)
         elif number == 6:
-            self.model = vggnet(13, 1000, False, self.b_pretrained, self.pretrained_path)
+            self.model = vggnet(13, 1000, self.b_pretrained, self.pretrained_path)
         elif number == 7:
-            self.model = vggnet(16, 1000, False, self.b_pretrained, self.pretrained_path)
+            self.model = vggnet(16, 1000, self.b_pretrained, self.pretrained_path)
         elif number == 8:
-            self.model = vggnet(19, 1000, False, self.b_pretrained, self.pretrained_path)
+            self.model = vggnet(19, 1000, self.b_pretrained, self.pretrained_path)
         elif number == 9:
             self.model = densenet(121, 1000, self.b_pretrained, self.pretrained_path)
         elif number == 10:
