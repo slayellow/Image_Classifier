@@ -319,7 +319,7 @@ class ImageClassifier:
         self.get_print_line()
         for epoch in range(start_epoch, total_epcoh):
             if self.model.get_name() == 'ConvNeXt_T':
-                pass
+                print('-' * 50)
             else:
                 self.get_print_line()
                 lr = adjust_learning_rate(self.optimizer, epoch, self.learning_rate)
@@ -365,13 +365,13 @@ class ImageClassifier:
             data_time.update(time.time() - end)
 
             if self.model.get_name() == 'ConvNeXt_T':
-                for i, param_group in enumerate(optimizer.param_groups):
+                for idx, param_group in enumerate(optimizer.param_groups):
                     if self.learning_rate_scheduler is not None:
                         param_group["lr"] = self.learning_rate_scheduler[self.step]
                 self.step = self.step + 1
             else:
                 self.get_print_line()
-                lr = adjust_learning_rate(self.optimizer, epoch, self.learning_rate)
+                lr = adjust_learning_rate(optimizer, epoch, self.learning_rate)
                 self.get_print_info("Training Epoch {} Start!".format(epoch + 1))
                 self.get_print_info("Current Learning Rate : {}".format(lr))
                 self.get_print_line()
