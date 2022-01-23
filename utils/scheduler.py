@@ -2,7 +2,7 @@ import numpy as np
 import math
 
 
-def cosine_scheduler(base_value, final_value, epochs, niter_per_ep, warmup_epochs=0,
+def cosine_scheduler(base_value=4e-3, final_value=1e-6, epochs=300, niter_per_ep=1, warmup_epochs=20,
                      start_warmup_value=0, warmup_steps=-1):
     warmup_schedule = np.array([])
     warmup_iters = warmup_epochs * niter_per_ep

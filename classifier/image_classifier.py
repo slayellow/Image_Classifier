@@ -9,6 +9,7 @@ from model.convnext import *
 from utils.color import *
 from utils.helper import *
 from model.utils.labelsmoothingcrossentropy import *
+from utils.scheduler import *
 import tkinter
 from tkinter import filedialog
 import torchinfo
@@ -34,6 +35,9 @@ class ImageClassifier:
         self.b_pretrained = False
         self.learning_rate = 0
         self.best_prec1 = 0
+        self.batch_size = 0
+        self.epochs = 0
+        self.step = 0
         self.training_accuracy_top1 = list()
         self.training_accuracy_top5 = list()
         self.validation_accuracy_top1 = list()
@@ -76,7 +80,8 @@ class ImageClassifier:
 
         self.get_print_line()
         self.get_print_request("Select Pretrained Model File")
-        pretrained_path = filedialog.askopenfilename(parent=root, initialdir="/", title="Please Select Pretrained Model File!")
+        pretrained_path = filedialog.askopenfilename(parent=root, initialdir="/",
+                                                     title="Please Select Pretrained Model File!")
         if pretrained_path == "" or pretrained_path == ():
             self.get_print_fail("Not Select Pretrained Model File!")
             self.get_print_line()
@@ -86,11 +91,12 @@ class ImageClassifier:
             self.get_print_fail("Pretrained File : {}".format(self.pretrained_path))
             self.get_print_line()
         self.get_print_line()
+
     def set_dataset_detail(self):
         self.get_print_line()
         self.get_print_request("Please enter the batch size!")
         self.get_print_request("Batch Size :")
-        batch_size = int(input())
+        self.batch_size = int(input())
         self.get_print_line()
         self.get_print_line()
         self.get_print_request("Please enter the num_worker size!")
@@ -98,8 +104,8 @@ class ImageClassifier:
         num_worker = int(input())
         self.get_print_line()
         self.get_print_line()
-        self.train_loader = self.dataset.get_train_loader(batch_size=batch_size, num_worker=num_worker)
-        self.valid_loader = self.dataset.get_valid_loader(batch_size=batch_size, num_worker=num_worker)
+        self.train_loader = self.dataset.get_train_loader(batch_size=self.batch_size, num_worker=num_worker)
+        self.valid_loader = self.dataset.get_valid_loader(batch_size=self.batch_size, num_worker=num_worker)
         self.get_print_info("DataLoader Detail Finish!!")
         self.get_print_line()
 
@@ -220,54 +226,65 @@ class ImageClassifier:
         self.get_print_info("Start Optimzier Setting")
         self.get_print_line()
 
-        self.get_print_line()
-        self.get_print_request("Please enter the learning rate!")
-        self.get_print_request("Learning Rate : ")
-        self.learning_rate = float(input())
-        self.get_print_line()
-
-        self.get_print_line()
-        self.get_print_request("Please enter the momentum!")
-        self.get_print_request("Momentum : ")
-        momentum = float(input())
-        self.get_print_line()
-
-        self.get_print_line()
-        self.get_print_request("Please enter the weight_decay")
-        self.get_print_request("Weight Decay : ")
-        weight_decay = float(input())
-
-        self.get_print_line()
-        self.get_print_request("Please enter the number")
-        self.get_print_request("0 : SGD, 1 : Adam, 2 : AdaGrad, 3 : RMSProp, 4 : AdamW")
-        number = int(input())
-        if number == 0:
-            self.optimizer = optim.SGD(self.model.parameters(), lr=self.learning_rate, momentum=momentum,
-                                       weight_decay=weight_decay)
-            self.get_print_response("You Select SGD -> Learning Rate : {}, Momentum : {}, Weight Decay : {}".format(
-                self.learning_rate, momentum, weight_decay))
-        elif number == 1:
-            self.optimizer = optim.Adam(self.model.parameters(), lr=self.learning_rate, weight_decay=weight_decay)
-            self.get_print_response("You Select Adam -> Learning Rate : {}, Weight Decay : {}".format(
-                self.learning_rate, weight_decay))
-        elif number == 2:
-            self.optimizer = optim.Adagrad(self.model.parameters(), lr=self.learning_rate, weight_decay=weight_decay)
-            self.get_print_response("You Select Adagrad -> Learning Rate : {}, Weight Decay : {}".format(
-                self.learning_rate, weight_decay))
-        elif number == 3:
-            self.optimizer = optim.RMSprop(self.model.parameters(), lr=self.learning_rate, momentum=momentum,
-                                           weight_decay=weight_decay)
-            self.get_print_response("You Select RMSProp -> Learning Rate : {}, Momentum : {}, Weight Decay : {}".format(
-                self.learning_rate, momentum, weight_decay))
-        elif number == 4:
-            self.optimizer = optim.AdamW(self.model.parameters(), lr=self.learning_rate, weight_decay=weight_decay)
-            self.get_print_response("You Select AdamW -> Learning Rate : {}, Weight Decay : {}".format(
-                self.learning_rate, weight_decay))
+        if self.model.get_name() == 'ConvNeXt_T':
+            total_batch_size = self.batch_size
+            num_training_steps_per_epoch = self.dataset.get_train_size() // total_batch_size
+            self.learning_rate_scheduler = cosine_scheduler(base_value=4e-3, final_value=1e-6, epochs=300,
+                                                            niter_per_ep=num_training_steps_per_epoch, warmup_epochs=20,
+                                                            start_warmup_value=0, warmup_steps=-1)
+            self.optimizer = optim.AdamW(self.model.parameters(), lr=4e-3, weight_decay=0.05)
         else:
-            self.get_print_fail("Not Corret Number!")
-            self.get_print_fail("Please Restart SW Now!!")
+
             self.get_print_line()
-            exit(1)
+            self.get_print_request("Please enter the learning rate!")
+            self.get_print_request("Learning Rate : ")
+            self.learning_rate = float(input())
+            self.get_print_line()
+
+            self.get_print_line()
+            self.get_print_request("Please enter the momentum!")
+            self.get_print_request("Momentum : ")
+            momentum = float(input())
+            self.get_print_line()
+
+            self.get_print_line()
+            self.get_print_request("Please enter the weight_decay")
+            self.get_print_request("Weight Decay : ")
+            weight_decay = float(input())
+
+            self.get_print_line()
+            self.get_print_request("Please enter the number")
+            self.get_print_request("0 : SGD, 1 : Adam, 2 : AdaGrad, 3 : RMSProp, 4 : AdamW")
+            number = int(input())
+            if number == 0:
+                self.optimizer = optim.SGD(self.model.parameters(), lr=self.learning_rate, momentum=momentum,
+                                           weight_decay=weight_decay)
+                self.get_print_response("You Select SGD -> Learning Rate : {}, Momentum : {}, Weight Decay : {}".format(
+                    self.learning_rate, momentum, weight_decay))
+            elif number == 1:
+                self.optimizer = optim.Adam(self.model.parameters(), lr=self.learning_rate, weight_decay=weight_decay)
+                self.get_print_response("You Select Adam -> Learning Rate : {}, Weight Decay : {}".format(
+                    self.learning_rate, weight_decay))
+            elif number == 2:
+                self.optimizer = optim.Adagrad(self.model.parameters(), lr=self.learning_rate,
+                                               weight_decay=weight_decay)
+                self.get_print_response("You Select Adagrad -> Learning Rate : {}, Weight Decay : {}".format(
+                    self.learning_rate, weight_decay))
+            elif number == 3:
+                self.optimizer = optim.RMSprop(self.model.parameters(), lr=self.learning_rate, momentum=momentum,
+                                               weight_decay=weight_decay)
+                self.get_print_response(
+                    "You Select RMSProp -> Learning Rate : {}, Momentum : {}, Weight Decay : {}".format(
+                        self.learning_rate, momentum, weight_decay))
+            elif number == 4:
+                self.optimizer = optim.AdamW(self.model.parameters(), lr=self.learning_rate, weight_decay=weight_decay)
+                self.get_print_response("You Select AdamW -> Learning Rate : {}, Weight Decay : {}".format(
+                    self.learning_rate, weight_decay))
+            else:
+                self.get_print_fail("Not Corret Number!")
+                self.get_print_fail("Please Restart SW Now!!")
+                self.get_print_line()
+                exit(1)
         self.get_print_info("Finish Optimizer Setting!!!")
         self.get_print_line()
 
@@ -301,11 +318,14 @@ class ImageClassifier:
         self.get_print_info("Train Start!")
         self.get_print_line()
         for epoch in range(start_epoch, total_epcoh):
-            self.get_print_line()
-            lr = adjust_learning_rate(self.optimizer, epoch, self.learning_rate)
-            self.get_print_info("Training Epoch {} Start!".format(epoch + 1))
-            self.get_print_info("Current Learning Rate : {}".format(lr))
-            self.get_print_line()
+            if self.model.get_name() == 'ConvNeXt_T':
+                pass
+            else:
+                self.get_print_line()
+                lr = adjust_learning_rate(self.optimizer, epoch, self.learning_rate)
+                self.get_print_info("Training Epoch {} Start!".format(epoch + 1))
+                self.get_print_info("Current Learning Rate : {}".format(lr))
+                self.get_print_line()
 
             self.get_print_line()
             self.train_per_epoch(self.train_loader, self.model, self.criterion, self.optimizer, epoch, 10)
@@ -343,6 +363,18 @@ class ImageClassifier:
         for i, (input, target) in enumerate(train_loader):
             # measure data loading time
             data_time.update(time.time() - end)
+
+            if self.model.get_name() == 'ConvNeXt_T':
+                for i, param_group in enumerate(optimizer.param_groups):
+                    if self.learning_rate_scheduler is not None:
+                        param_group["lr"] = self.learning_rate_scheduler[self.step]
+                self.step = self.step + 1
+            else:
+                self.get_print_line()
+                lr = adjust_learning_rate(self.optimizer, epoch, self.learning_rate)
+                self.get_print_info("Training Epoch {} Start!".format(epoch + 1))
+                self.get_print_info("Current Learning Rate : {}".format(lr))
+                self.get_print_line()
 
             if torch.cuda.is_available():
                 target = target.to(self.dev)
