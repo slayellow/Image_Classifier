@@ -6,6 +6,8 @@ from model.ror import *
 from model.preactivation_resnet import *
 from model.resnext import *
 from model.convnext import *
+from model.mobilenet_v1 import *
+from model.senet import *
 from utils.color import *
 from utils.helper import *
 from model.utils.labelsmoothingcrossentropy import *
@@ -120,6 +122,10 @@ class ImageClassifier:
         self.get_print_request("18 : ResNeXt-50, 19 : ResNeXt-101, 20 : ResNeXt-152")
         self.get_print_request("21 : RoR3-18, 22 : RoR3-34, 23 : RoR3-50, 24 : RoR3-101, 25 : RoR3-152")
         self.get_print_request("26 : ConvNeXt-T, 27 : ConvNeXt-S, 28 : ConvNeXt-B, 29 : ConvNeXt-L, 30 : ConvNeXt-XL")
+        self.get_print_request("31 : SE-ResNet-18, 32 : SE-ResNet-34, 33 : SE-ResNet-50, "
+                               "34 : SE-ResNet-101, 35 : SE-ResNet-152")
+        self.get_print_request("36 : SE-ResNeXt-50, 37 : SE-ResNeXt-101, 38 : SE-ResNeXt-152")
+        self.get_print_request("39 : MobileNet_V1")
         number = int(input())
         if number == 0:
             self.model = resnet(18, 1000, self.b_pretrained, self.pretrained_path)
@@ -183,6 +189,24 @@ class ImageClassifier:
             self.model = convnext('L', 1000, self.b_pretrained, self.pretrained_path)
         elif number == 30:
             self.model = convnext('XL', 1000, self.b_pretrained, self.pretrained_path)
+        elif number == 31:
+            self.model = senet(18, 1000, False, self.b_pretrained, self.pretrained_path)
+        elif number == 32:
+            self.model = senet(34, 1000, False, self.b_pretrained, self.pretrained_path)
+        elif number == 33:
+            self.model = senet(50, 1000, False, self.b_pretrained, self.pretrained_path)
+        elif number == 34:
+            self.model = senet(101, 1000, False, self.b_pretrained, self.pretrained_path)
+        elif number == 35:
+            self.model = senet(152, 1000, False, self.b_pretrained, self.pretrained_path)
+        elif number == 36:
+            self.model = senet(50, 1000, True, self.b_pretrained, self.pretrained_path)
+        elif number == 37:
+            self.model = senet(101, 1000, True, self.b_pretrained, self.pretrained_path)
+        elif number == 38:
+            self.model = senet(152, 1000, True, self.b_pretrained, self.pretrained_path)
+        elif number == 39:
+            self.model = mobilenet_v1(1000, self.b_pretrained, self.pretrained_path)
         else:
             self.get_print_fail("Not Corret Number!")
             self.get_print_fail("Please Restart SW Now!!")

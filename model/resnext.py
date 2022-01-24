@@ -4,37 +4,6 @@ import torch
 import torch.nn as nn
 
 
-class BasicBlock(nn.Module):
-    expansion = 1
-
-    def __init__(self, inplanes, planes, stride=1, downsample=None):
-        super(BasicBlock, self).__init__()
-        self.conv1 = nn.Conv2d(inplanes, planes * 2, kernel_size=3, stride=stride, padding=1, bias=False)
-        self.bn1 = nn.BatchNorm2d(planes * 2)
-        self.relu = nn.ReLU(inplace=True)
-        self.conv2 = nn.Conv2d(planes * 2, planes * 2, kernel_size=3, padding=1, groups=32, bias=False)
-        self.bn2 = nn.BatchNorm2d(planes * 2)
-        self.downsample = downsample
-        self.stride = stride
-
-    def forward(self, x):
-        residual = x
-
-        out = self.conv1(x)
-        out = self.bn1(out)
-        out = self.relu(out)
-        out = self.conv2(out)
-        out = self.bn2(out)
-
-        if self.downsample is not None:
-            residual = self.downsample(x)
-
-        out += residual
-        out = self.relu(out)
-
-        return out
-
-
 class Bottleneck(nn.Module):
     expansion = 4
 
