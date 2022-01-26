@@ -250,7 +250,7 @@ class ImageClassifier:
         self.get_print_info("Start Optimzier Setting")
         self.get_print_line()
 
-        if self.model.get_name() == 'ConvNeXt_T':
+        if self.model.get_name() == 'ConvNeXt_L':
             total_batch_size = self.batch_size
             num_training_steps_per_epoch = self.dataset.get_train_size() // total_batch_size
             self.learning_rate_scheduler = cosine_scheduler(base_value=4e-3, final_value=1e-6, epochs=300,
@@ -342,7 +342,7 @@ class ImageClassifier:
         self.get_print_info("Train Start!")
         self.get_print_line()
         for epoch in range(start_epoch, total_epcoh):
-            if self.model.get_name() == 'ConvNeXt_T':
+            if self.model.get_name() == 'ConvNeXt_L':
                 print('-' * 50)
             else:
                 self.get_print_line()
