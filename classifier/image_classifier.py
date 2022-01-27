@@ -8,6 +8,7 @@ from model.resnext import *
 from model.convnext import *
 from model.mobilenet_v1 import *
 from model.senet import *
+from model.shufflenet_v1 import *
 from utils.color import *
 from utils.helper import *
 from model.utils.labelsmoothingcrossentropy import *
@@ -126,6 +127,8 @@ class ImageClassifier:
                                "34 : SE-ResNet-101, 35 : SE-ResNet-152")
         self.get_print_request("36 : SE-ResNeXt-50, 37 : SE-ResNeXt-101, 38 : SE-ResNeXt-152")
         self.get_print_request("39 : MobileNet_V1")
+        self.get_print_request("40 : ShuffleNet_V1_1, 41 : ShuffleNet_V1_2, 42 : ShuffleNet_V1_3, "
+                               "43 : ShuffleNet_V1_4, 44 : ShuffleNet_V1_8,")
         number = int(input())
         if number == 0:
             self.model = resnet(18, 1000, self.b_pretrained, self.pretrained_path)
@@ -207,6 +210,16 @@ class ImageClassifier:
             self.model = senet(152, 1000, True, self.b_pretrained, self.pretrained_path)
         elif number == 39:
             self.model = mobilenet_v1(1000, self.b_pretrained, self.pretrained_path)
+        elif number == 40:
+            self.model = shufflenet_v1(1, 1000, self.b_pretrained, self.pretrained_path)
+        elif number == 41:
+            self.model = shufflenet_v1(2, 1000, self.b_pretrained, self.pretrained_path)
+        elif number == 42:
+            self.model = shufflenet_v1(3, 1000, self.b_pretrained, self.pretrained_path)
+        elif number == 43:
+            self.model = shufflenet_v1(4, 1000, self.b_pretrained, self.pretrained_path)
+        elif number == 44:
+            self.model = shufflenet_v1(8, 1000, self.b_pretrained, self.pretrained_path)
         else:
             self.get_print_fail("Not Corret Number!")
             self.get_print_fail("Please Restart SW Now!!")
@@ -342,14 +355,12 @@ class ImageClassifier:
         self.get_print_info("Train Start!")
         self.get_print_line()
         for epoch in range(start_epoch, total_epcoh):
-            if self.model.get_name() == 'ConvNeXt_L':
-                print('-' * 50)
-            else:
-                self.get_print_line()
-                lr = adjust_learning_rate(self.optimizer, epoch, self.learning_rate)
-                self.get_print_info("Training Epoch {} Start!".format(epoch + 1))
-                self.get_print_info("Current Learning Rate : {}".format(lr))
-                self.get_print_line()
+
+            self.get_print_line()
+            lr = adjust_learning_rate(self.optimizer, epoch, self.learning_rate)
+            self.get_print_info("Training Epoch {} Start!".format(epoch + 1))
+            self.get_print_info("Current Learning Rate : {}".format(lr))
+            self.get_print_line()
 
             self.get_print_line()
             self.train_per_epoch(self.train_loader, self.model, self.criterion, self.optimizer, epoch, 10)
@@ -387,18 +398,6 @@ class ImageClassifier:
         for i, (input, target) in enumerate(train_loader):
             # measure data loading time
             data_time.update(time.time() - end)
-
-            if self.model.get_name() == 'ConvNeXt_T':
-                for idx, param_group in enumerate(optimizer.param_groups):
-                    if self.learning_rate_scheduler is not None:
-                        param_group["lr"] = self.learning_rate_scheduler[self.step]
-                self.step = self.step + 1
-            else:
-                self.get_print_line()
-                lr = adjust_learning_rate(optimizer, epoch, self.learning_rate)
-                self.get_print_info("Training Epoch {} Start!".format(epoch + 1))
-                self.get_print_info("Current Learning Rate : {}".format(lr))
-                self.get_print_line()
 
             if torch.cuda.is_available():
                 target = target.to(self.dev)

@@ -217,8 +217,8 @@ class ShuffleNet_V1(nn.Module):
                 m.bias.data.zero_()
 
 
-def mobilenet_v1(group, classes, pretrained=False, pretrained_path=None):
-    model = ShuffleNet_V1(group=group, num_classes=classes)
+def shufflenet_v1(group, classes, pretrained=False, pretrained_path=None):
+    model = ShuffleNet_V1(groups=group, num_classes=classes)
     if pretrained:
         model.load_state_dict(torch.load(pretrained_path)['state_dict'])
     return model
