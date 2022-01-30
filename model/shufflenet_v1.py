@@ -112,7 +112,7 @@ class ShuffleNet_V1(nn.Module):
     def __init__(self, groups, num_classes=1000):
         super(ShuffleNet_V1, self).__init__()
 
-        self.model_name = 'MobileNet_V1_{}'.format(groups)
+        self.model_name = 'ShuffleNet_V1_{}'.format(groups)
 
         self.groups = groups
         self.stage_repeats = [3, 7, 3]
