@@ -9,6 +9,8 @@ from model.convnext import *
 from model.mobilenet_v1 import *
 from model.senet import *
 from model.shufflenet_v1 import *
+from model.mobilenet_v2 import *
+from model.efficientnet_v1 import *
 from utils.color import *
 from utils.helper import *
 from model.utils.labelsmoothingcrossentropy import *
@@ -126,9 +128,12 @@ class ImageClassifier:
         self.get_print_request("31 : SE-ResNet-18, 32 : SE-ResNet-34, 33 : SE-ResNet-50, "
                                "34 : SE-ResNet-101, 35 : SE-ResNet-152")
         self.get_print_request("36 : SE-ResNeXt-50, 37 : SE-ResNeXt-101, 38 : SE-ResNeXt-152")
-        self.get_print_request("39 : MobileNet_V1")
-        self.get_print_request("40 : ShuffleNet_V1_1, 41 : ShuffleNet_V1_2, 42 : ShuffleNet_V1_3, "
-                               "43 : ShuffleNet_V1_4, 44 : ShuffleNet_V1_8,")
+        self.get_print_request("39 : MobileNet_V1, 40 : MobileNet_V2")
+        self.get_print_request("41 : ShuffleNet_V1_1, 42 : ShuffleNet_V1_2, 43 : ShuffleNet_V1_3, "
+                               "44 : ShuffleNet_V1_4, 45 : ShuffleNet_V1_8,")
+        self.get_print_request("46 : EfficientNet_V1_0, 47 : EfficientNet_V1_1, 48 : EfficientNet_V1_2, "
+                               "49 : EfficientNet_V1_3, 50 : EfficientNet_V1_4, 51 : EfficientNet_V1_5, "
+                               "52 : EfficientNet_V1_6, 53 : EfficientNet_V1_7")
         number = int(input())
         if number == 0:
             self.model = resnet(18, 1000, self.b_pretrained, self.pretrained_path)
@@ -211,15 +216,33 @@ class ImageClassifier:
         elif number == 39:
             self.model = mobilenet_v1(1000, self.b_pretrained, self.pretrained_path)
         elif number == 40:
-            self.model = shufflenet_v1(1, 1000, self.b_pretrained, self.pretrained_path)
+            self.model = mobilenet_v2(1000, self.b_pretrained, self.pretrained_path)
         elif number == 41:
-            self.model = shufflenet_v1(2, 1000, self.b_pretrained, self.pretrained_path)
+            self.model = shufflenet_v1(1, 1000, self.b_pretrained, self.pretrained_path)
         elif number == 42:
-            self.model = shufflenet_v1(3, 1000, self.b_pretrained, self.pretrained_path)
+            self.model = shufflenet_v1(2, 1000, self.b_pretrained, self.pretrained_path)
         elif number == 43:
-            self.model = shufflenet_v1(4, 1000, self.b_pretrained, self.pretrained_path)
+            self.model = shufflenet_v1(3, 1000, self.b_pretrained, self.pretrained_path)
         elif number == 44:
+            self.model = shufflenet_v1(4, 1000, self.b_pretrained, self.pretrained_path)
+        elif number == 45:
             self.model = shufflenet_v1(8, 1000, self.b_pretrained, self.pretrained_path)
+        elif number == 46:
+            self.model = efficientnet_v1(0, 1000, self.b_pretrained, self.pretrained_path)
+        elif number == 47:
+            self.model = efficientnet_v1(1, 1000, self.b_pretrained, self.pretrained_path)
+        elif number == 48:
+            self.model = efficientnet_v1(2, 1000, self.b_pretrained, self.pretrained_path)
+        elif number == 49:
+            self.model = efficientnet_v1(3, 1000, self.b_pretrained, self.pretrained_path)
+        elif number == 50:
+            self.model = efficientnet_v1(4, 1000, self.b_pretrained, self.pretrained_path)
+        elif number == 51:
+            self.model = efficientnet_v1(5, 1000, self.b_pretrained, self.pretrained_path)
+        elif number == 52:
+            self.model = efficientnet_v1(6, 1000, self.b_pretrained, self.pretrained_path)
+        elif number == 53:
+            self.model = efficientnet_v1(7, 1000, self.b_pretrained, self.pretrained_path)
         else:
             self.get_print_fail("Not Corret Number!")
             self.get_print_fail("Please Restart SW Now!!")
