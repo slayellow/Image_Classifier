@@ -75,3 +75,14 @@ Training
 Validation  
   Top-1 Accuracy : 70.842%  
   Top-5 Accuracy : 89.922%  
+  
+## 4. MobileNet V1
+
+Training  
+  Top-1 Accuracy : 68.594%  
+  Top-5 Accuracy : 87.122%  
+
+Validation  
+  Top-1 Accuracy : 69.832%  
+  Top-5 Accuracy : 89.444%  
+
