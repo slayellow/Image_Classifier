@@ -383,12 +383,10 @@ class ImageClassifier:
         for epoch in range(start_epoch, total_epcoh):
 
             self.get_print_line()
-            if 'Efficient' in self.model.get_name():
-                self.get_print_info('EfficientNet Training Epcoh : {}'.format(epoch))
-            else:
-                lr = adjust_learning_rate(self.optimizer, epoch, self.learning_rate)
-                self.get_print_info("Training Epoch {} Start!".format(epoch + 1))
-                self.get_print_info("Current Learning Rate : {}".format(lr))
+
+            lr = adjust_learning_rate(self.optimizer, epoch, self.learning_rate)
+            self.get_print_info("Training Epoch {} Start!".format(epoch + 1))
+            self.get_print_info("Current Learning Rate : {}".format(lr))
             self.get_print_line()
 
             self.get_print_line()
