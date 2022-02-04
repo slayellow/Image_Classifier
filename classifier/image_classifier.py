@@ -431,7 +431,7 @@ class ImageClassifier:
             if torch.cuda.is_available():
                 target = target.to(self.dev)
                 input = input.to(self.dev)
-
+            optimizer.zero_grad()
             # compute output
             output = model(input)
             loss = criterion(output, target)
@@ -442,7 +442,6 @@ class ImageClassifier:
             top1.update(prec1[0], input.size(0))
             top5.update(prec5[0], input.size(0))
 
-            optimizer.zero_grad()
             loss.backward()
             optimizer.step()
             if self.scheduler is not None:
