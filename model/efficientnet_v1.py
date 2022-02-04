@@ -166,8 +166,7 @@ class EfficientNet_V1(nn.Module):
 
         self.stage1 = nn.Sequential(
             nn.Conv2d(3, channels[0], kernel_size=3, stride=2, padding=1, bias=False),
-            nn.BatchNorm2d(channels[0], momentum=0.99, eps=1e-3),
-            Swish())
+            nn.BatchNorm2d(channels[0], momentum=0.99, eps=1e-3))
 
         self.stage2 = MBConv(channels[0], channels[1], repeats[0], kernel_size=kernel_sizes[0],
                              stride=strides[0], expand=expands[0], se_ratio=se_ratio, sum_layer=sum_layer,
@@ -216,15 +215,15 @@ class EfficientNet_V1(nn.Module):
                     m.bias.data.zero_()
 
     def forward(self, x):
-        x = self.upsample(x)
-        x = self.stage1(x)
-        x = self.stage2(x)
-        x = self.stage3(x)
-        x = self.stage4(x)
-        x = self.stage5(x)
-        x = self.stage6(x)
-        x = self.stage7(x)
-        x = self.stage8(x)
+        x = self.swish(self.upsample(x))
+        x = self.swish(self.stage1(x))
+        x = self.swish(self.stage2(x))
+        x = self.swish(self.stage3(x))
+        x = self.swish(self.stage4(x))
+        x = self.swish(self.stage5(x))
+        x = self.swish(self.stage6(x))
+        x = self.swish(self.stage7(x))
+        x = self.swish(self.stage8(x))
         output = self.stage9(x)
         return output
 
