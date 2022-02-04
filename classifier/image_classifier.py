@@ -410,7 +410,7 @@ class ImageClassifier:
 
             # lr = adjust_learning_rate(self.optimizer, epoch, self.learning_rate)
             self.get_print_info("Training Epoch {} Start!".format(epoch + 1))
-            self.get_print_info("Current Learning Rate : {}".format(self.scheduler.get_lr()))
+            self.get_print_info("Current Learning Rate : {}".format(self.scheduler.get_last_lr()))
             self.get_print_line()
 
             self.get_print_line()
