@@ -34,6 +34,7 @@ class ImageClassifier:
         self.train_loader = None
         self.valid_loader = None
         self.model = None
+        self.scheduler = None
         self.criterion = None
         self.optimizer = None
         self.pretrained_path = None
@@ -333,6 +334,8 @@ class ImageClassifier:
             elif number == 3:
                 self.optimizer = optim.RMSprop(self.model.parameters(), lr=self.learning_rate, momentum=momentum,
                                                weight_decay=weight_decay)
+                self.scheduler = torch.optim.lr_scheduler.StepLR(self.optimizer,
+                                                                 step_size=int(2.4*len(self.train_loader)), gamma=0.97)
                 self.get_print_response(
                     "You Select RMSProp -> Learning Rate : {}, Momentum : {}, Weight Decay : {}".format(
                         self.learning_rate, momentum, weight_decay))
@@ -380,7 +383,10 @@ class ImageClassifier:
         for epoch in range(start_epoch, total_epcoh):
 
             self.get_print_line()
-            lr = adjust_learning_rate(self.optimizer, epoch, self.learning_rate)
+            if 'Efficient' in self.model.get_name():
+                print('EfficientNet Training Epcoh : ', epoch)
+            else:
+                lr = adjust_learning_rate(self.optimizer, epoch, self.learning_rate)
             self.get_print_info("Training Epoch {} Start!".format(epoch + 1))
             self.get_print_info("Current Learning Rate : {}".format(lr))
             self.get_print_line()
@@ -439,7 +445,8 @@ class ImageClassifier:
             optimizer.zero_grad()
             loss.backward()
             optimizer.step()
-
+            if self.scheduler is not None:
+                self.scheduler.step()
             batch_time.update(time.time() - end)
             end = time.time()
             if i % print_freq == 0:
