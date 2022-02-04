@@ -334,8 +334,6 @@ class ImageClassifier:
             elif number == 3:
                 self.optimizer = optim.RMSprop(self.model.parameters(), lr=self.learning_rate, momentum=momentum,
                                                weight_decay=weight_decay)
-                self.scheduler = torch.optim.lr_scheduler.StepLR(self.optimizer,
-                                                                 step_size=int(2.4*len(self.train_loader)), gamma=0.97)
                 self.get_print_response(
                     "You Select RMSProp -> Learning Rate : {}, Momentum : {}, Weight Decay : {}".format(
                         self.learning_rate, momentum, weight_decay))
@@ -348,6 +346,32 @@ class ImageClassifier:
                 self.get_print_fail("Please Restart SW Now!!")
                 self.get_print_line()
                 exit(1)
+
+            self.get_print_line()
+            self.get_print_request("Please enter the number")
+            self.get_print_request("0 : StepLR")
+            number = int(input())
+
+            if number == 0:
+                self.get_print_line()
+                self.get_print_request("Please enter the Step Size")
+                self.get_print_request("Step Size : ")
+                step_size = float(input())
+
+                self.get_print_line()
+                self.get_print_request("Please enter the Gamma")
+                self.get_print_request("Gamma : ")
+                gamma = float(input())
+
+                self.scheduler = torch.optim.lr_scheduler.StepLR(self.optimizer,
+                                                                 step_size=step_size,
+                                                                 gamma=gamma)
+            else:
+                self.get_print_fail("Not Corret Number!")
+                self.get_print_fail("Please Restart SW Now!!")
+                self.get_print_line()
+                exit(1)
+
         self.get_print_info("Finish Optimizer Setting!!!")
         self.get_print_line()
 
@@ -384,9 +408,9 @@ class ImageClassifier:
 
             self.get_print_line()
 
-            lr = adjust_learning_rate(self.optimizer, epoch, self.learning_rate)
+            # lr = adjust_learning_rate(self.optimizer, epoch, self.learning_rate)
             self.get_print_info("Training Epoch {} Start!".format(epoch + 1))
-            self.get_print_info("Current Learning Rate : {}".format(lr))
+            self.get_print_info("Current Learning Rate : {}".format(self.scheduler.get_lr()))
             self.get_print_line()
 
             self.get_print_line()
@@ -396,6 +420,8 @@ class ImageClassifier:
             self.get_print_line()
             prec1, prec5 = self.validate(self.valid_loader, self.model, self.criterion, 10)
             self.get_print_line()
+
+            self.scheduler.step()
 
             is_best = prec1 > best_prec1
             best_prec1 = max(prec1, best_prec1)
