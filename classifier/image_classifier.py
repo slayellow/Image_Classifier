@@ -333,7 +333,7 @@ class ImageClassifier:
                     self.learning_rate, weight_decay))
             elif number == 3:
                 self.optimizer = optim.RMSprop(self.model.parameters(), lr=self.learning_rate, momentum=momentum,
-                                               weight_decay=weight_decay)
+                                               weight_decay=weight_decay, eps=0.001)
                 self.get_print_response(
                     "You Select RMSProp -> Learning Rate : {}, Momentum : {}, Weight Decay : {}".format(
                         self.learning_rate, momentum, weight_decay))
@@ -468,18 +468,17 @@ class ImageClassifier:
 
             loss.backward()
             optimizer.step()
-            if self.scheduler is not None:
-                self.scheduler.step()
             batch_time.update(time.time() - end)
             end = time.time()
             if i % print_freq == 0:
-                self.get_print_info("Epoch: [{0}][{1}/{2}]\t"
+                self.get_print_info("Learning Rate : {0} \t"
+                                    "Epoch: [{1}][{2}/{3}]\t"
                                     "Time {batch_time.val:.3f} ({batch_time.avg:.3f})\t"
                                     "Data {data_time.val:.3f} ({data_time.avg:.3f})\t"
                                     "Loss {loss.val:.4f} ({loss.avg:.4f})\t"
                                     "Prec@1 {top1.val:.3f} ({top1.avg:.3f})\t"
                                     "Prec@5 {top5.val:.3f} ({top5.avg:.3f})\t".format(
-                    epoch + 1, i, len(train_loader), batch_time=batch_time,
+                    self.scheduler.get_last_lr(), epoch + 1, i, len(train_loader), batch_time=batch_time,
                     data_time=data_time, loss=losses, top1=top1, top5=top5))
         self.training_accuracy_top1.append(top1.avg)
         self.training_accuracy_top5.append(top5.avg)

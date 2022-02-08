@@ -45,19 +45,19 @@ class Bottleneck(nn.Module):
         if expand == 1:
             self.conv2 = nn.Conv2d(in_channel*expand, in_channel*expand, kernel_size=kernel_size, stride=stride,
                                    padding=kernel_size//2, groups=in_channel*expand, bias=False)
-            self.bn2 = nn.BatchNorm2d(in_channel*expand, momentum=0.99, eps=1e-3)
+            self.bn2 = nn.BatchNorm2d(in_channel*expand, momentum=0.01, eps=1e-3)
             self.se = SEModule(in_channel*expand, se_ratio)
             self.conv3 = nn.Conv2d(in_channel*expand, out_channel, kernel_size=1, bias=False)
-            self.bn3 = nn.BatchNorm2d(out_channel, momentum=0.99, eps=1e-3)
+            self.bn3 = nn.BatchNorm2d(out_channel, momentum=0.01, eps=1e-3)
         else:
             self.conv1 = nn.Conv2d(in_channel, in_channel*expand, kernel_size=1, bias=False)
-            self.bn1 = nn.BatchNorm2d(in_channel*expand, momentum=0.99, eps=1e-3)
+            self.bn1 = nn.BatchNorm2d(in_channel*expand, momentum=0.01, eps=1e-3)
             self.conv2 = nn.Conv2d(in_channel*expand, in_channel*expand, kernel_size=kernel_size, stride=stride,
                                    padding=kernel_size//2, groups=in_channel*expand, bias=False)
-            self.bn2 = nn.BatchNorm2d(in_channel*expand, momentum=0.99, eps=1e-3)
+            self.bn2 = nn.BatchNorm2d(in_channel*expand, momentum=0.01, eps=1e-3)
             self.se = SEModule(in_channel*expand, se_ratio)
             self.conv3 = nn.Conv2d(in_channel*expand, out_channel, kernel_size=1, bias=False)
-            self.bn3 = nn.BatchNorm2d(out_channel, momentum=0.99, eps=1e-3)
+            self.bn3 = nn.BatchNorm2d(out_channel, momentum=0.01, eps=1e-3)
 
         self.swish = Swish()
         self.correct_dim = (stride == 1) and (in_channel == out_channel)
@@ -166,7 +166,7 @@ class EfficientNet_V1(nn.Module):
 
         self.stage1 = nn.Sequential(
             nn.Conv2d(3, channels[0], kernel_size=3, stride=2, padding=1, bias=False),
-            nn.BatchNorm2d(channels[0], momentum=0.99, eps=1e-3),
+            nn.BatchNorm2d(channels[0], momentum=0.01, eps=1e-3),
             Swish())
 
         self.stage2 = MBConv(channels[0], channels[1], repeats[0], kernel_size=kernel_sizes[0],
@@ -193,7 +193,7 @@ class EfficientNet_V1(nn.Module):
 
         self.stage9 = nn.Sequential(
             nn.Conv2d(channels[7], channels[8], kernel_size=1, bias=False),
-            nn.BatchNorm2d(channels[8], momentum=0.99, eps=1e-3),
+            nn.BatchNorm2d(channels[8], momentum=0.01, eps=1e-3),
             Swish(),
             nn.AdaptiveAvgPool2d((1, 1)),
             Flatten(),
