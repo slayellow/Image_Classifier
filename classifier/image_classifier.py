@@ -53,50 +53,101 @@ class ImageClassifier:
         root = tkinter.Tk()
         root.withdraw()
 
-        # Load Train Folderpath
+        # GUI Option
         self.get_print_line()
-        self.get_print_request("Select Training Folder Path")
-        train_path = filedialog.askdirectory(parent=root, initialdir="/", title="Please Select A Train Data Folder")
-        if train_path == "" or train_path == ():
-            self.get_print_fail("Not Select Training Folder Path!")
-            self.get_print_fail("Please Restart SW Now!!")
+        self.get_print_request("Please enter the number")
+        self.get_print_request("0 : GUI, 1 : No GUI")
+        number = int(input())
+        if number == 0:
+            # Load Train Folderpath
             self.get_print_line()
-            exit(1)
-        self.get_print_response("Train Path : {}".format(train_path))
-        self.get_print_line()
+            self.get_print_request("Select Training Folder Path")
+            train_path = filedialog.askdirectory(parent=root, initialdir="/", title="Please Select A Train Data Folder")
+            if train_path == "" or train_path == ():
+                self.get_print_fail("Not Select Training Folder Path!")
+                self.get_print_fail("Please Restart SW Now!!")
+                self.get_print_line()
+                exit(1)
+            self.get_print_response("Train Path : {}".format(train_path))
+            self.get_print_line()
 
-        self.get_print_line()
-        self.get_print_request("Select Validation Folder Path")
-        valid_path = filedialog.askdirectory(parent=root, initialdir="/", title="Please Select A Valid Data Folder")
-        if valid_path == "" or valid_path == ():
-            self.get_print_fail("Not Select Validation Folder Path!")
-            self.get_print_fail("Please Restart SW Now!!")
             self.get_print_line()
-            exit(1)
-        self.get_print_response("Validation Path : {}".format(valid_path))
-        self.get_print_line()
+            self.get_print_request("Select Validation Folder Path")
+            valid_path = filedialog.askdirectory(parent=root, initialdir="/", title="Please Select A Valid Data Folder")
+            if valid_path == "" or valid_path == ():
+                self.get_print_fail("Not Select Validation Folder Path!")
+                self.get_print_fail("Please Restart SW Now!!")
+                self.get_print_line()
+                exit(1)
+            self.get_print_response("Validation Path : {}".format(valid_path))
+            self.get_print_line()
 
-        self.get_print_line()
-        self.get_print_info("Load ImageNet Dataset!")
-        self.dataset = ImageNet(train_path, valid_path)
-        self.get_print_info("Training Data Size : {}, Validation Data Size : {}".format(self.dataset.get_train_size(),
-                                                                                        self.dataset.get_valid_size()))
-        self.get_print_info("Load ImageNet Dataset Finish!!")
-        self.get_print_line()
+            self.get_print_line()
+            self.get_print_info("Load ImageNet Dataset!")
+            self.dataset = ImageNet(train_path, valid_path)
+            self.get_print_info("Training Data Size : {}, Validation Data Size : {}".format(self.dataset.get_train_size(),
+                                                                                            self.dataset.get_valid_size()))
+            self.get_print_info("Load ImageNet Dataset Finish!!")
+            self.get_print_line()
 
-        self.get_print_line()
-        self.get_print_request("Select Pretrained Model File")
-        pretrained_path = filedialog.askopenfilename(parent=root, initialdir="/",
-                                                     title="Please Select Pretrained Model File!")
-        if pretrained_path == "" or pretrained_path == ():
-            self.get_print_fail("Not Select Pretrained Model File!")
             self.get_print_line()
-        else:
-            self.pretrained_path = pretrained_path
-            self.b_pretrained = True
-            self.get_print_fail("Pretrained File : {}".format(self.pretrained_path))
+            self.get_print_request("Select Pretrained Model File")
+            pretrained_path = filedialog.askopenfilename(parent=root, initialdir="/",
+                                                         title="Please Select Pretrained Model File!")
+            if pretrained_path == "" or pretrained_path == ():
+                self.get_print_fail("Not Select Pretrained Model File!")
+                self.get_print_line()
+            else:
+                self.pretrained_path = pretrained_path
+                self.b_pretrained = True
+                self.get_print_fail("Pretrained File : {}".format(self.pretrained_path))
+                self.get_print_line()
             self.get_print_line()
-        self.get_print_line()
+        elif number == 1:
+            # Load Train Folderpath
+            self.get_print_line()
+            self.get_print_request("Write Training Folder Path")
+            train_path = input()
+            if train_path == "" or train_path == ():
+                self.get_print_fail("Not Select Training Folder Path!")
+                self.get_print_fail("Please Restart SW Now!!")
+                self.get_print_line()
+                exit(1)
+            self.get_print_response("Train Path : {}".format(train_path))
+            self.get_print_line()
+
+            self.get_print_line()
+            self.get_print_request("Select Validation Folder Path")
+            valid_path = input()
+            if valid_path == "" or valid_path == ():
+                self.get_print_fail("Not Select Validation Folder Path!")
+                self.get_print_fail("Please Restart SW Now!!")
+                self.get_print_line()
+                exit(1)
+            self.get_print_response("Validation Path : {}".format(valid_path))
+            self.get_print_line()
+
+            self.get_print_line()
+            self.get_print_info("Load ImageNet Dataset!")
+            self.dataset = ImageNet(train_path, valid_path)
+            self.get_print_info(
+                "Training Data Size : {}, Validation Data Size : {}".format(self.dataset.get_train_size(),
+                                                                            self.dataset.get_valid_size()))
+            self.get_print_info("Load ImageNet Dataset Finish!!")
+            self.get_print_line()
+
+            self.get_print_line()
+            self.get_print_request("Select Pretrained Model File")
+            pretrained_path = input()
+            if pretrained_path == "" or pretrained_path == ():
+                self.get_print_fail("Not Select Pretrained Model File!")
+                self.get_print_line()
+            else:
+                self.pretrained_path = pretrained_path
+                self.b_pretrained = True
+                self.get_print_fail("Pretrained File : {}".format(self.pretrained_path))
+                self.get_print_line()
+            self.get_print_line()
 
     def set_dataset_detail(self):
         self.get_print_line()
