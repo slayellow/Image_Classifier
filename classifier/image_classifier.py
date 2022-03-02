@@ -23,6 +23,7 @@ import os
 import time
 import numpy as np
 import matplotlib.pyplot as plt
+from torch.utils.tensorboard import SummaryWriter
 
 
 class ImageClassifier:
@@ -44,6 +45,7 @@ class ImageClassifier:
         self.batch_size = 0
         self.epochs = 0
         self.step = 0
+        self.writer = None
         self.training_accuracy_top1 = list()
         self.training_accuracy_top5 = list()
         self.validation_accuracy_top1 = list()
@@ -455,6 +457,13 @@ class ImageClassifier:
         self.get_print_line()
         self.get_print_info("Train Start!")
         self.get_print_line()
+
+        self.writer = SummaryWriter('runs/' + self.model.get_name())
+
+        dataiter = iter(self.train_loader)
+        source, target = dataiter.next()
+        self.writer.add_graph(self.model, source.to(self.dev))
+
         for epoch in range(start_epoch, total_epcoh):
 
             self.get_print_line()
@@ -522,6 +531,10 @@ class ImageClassifier:
             batch_time.update(time.time() - end)
             end = time.time()
             if i % print_freq == 0:
+                self.writer.add_scalar('loss', losses.avg, epoch * self.dataset.get_train_size() + i)
+                self.writer.add_scalar('learning_rate', self.scheduler.get_last_lr()[0], epoch * self.dataset.get_train_size() + i)
+                self.writer.add_scalar('top1_accuracy', top1.avg, epoch * self.dataset.get_train_size() + i)
+                self.writer.add_scalar('top5_accuracy', top5.avg, epoch * self.dataset.get_train_size() + i)
                 self.get_print_info("Learning Rate : {0} \t"
                                     "Epoch: [{1}][{2}/{3}]\t"
                                     "Time {batch_time.val:.3f} ({batch_time.avg:.3f})\t"
