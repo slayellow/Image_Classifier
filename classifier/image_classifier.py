@@ -52,15 +52,14 @@ class ImageClassifier:
         self.validation_accuracy_top5 = list()
 
     def load_dataset(self):
-        root = tkinter.Tk()
-        root.withdraw()
-
         # GUI Option
         self.get_print_line()
         self.get_print_request("Please enter the number")
         self.get_print_request("0 : GUI, 1 : No GUI")
         number = int(input())
         if number == 0:
+	    root = tkinter.Tk()
+            root.withdraw()
             # Load Train Folderpath
             self.get_print_line()
             self.get_print_request("Select Training Folder Path")
