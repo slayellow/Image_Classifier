@@ -58,7 +58,7 @@ class ImageClassifier:
         self.get_print_request("0 : GUI, 1 : No GUI")
         number = int(input())
         if number == 0:
-	    root = tkinter.Tk()
+            root = tkinter.Tk()
             root.withdraw()
             # Load Train Folderpath
             self.get_print_line()
