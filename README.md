@@ -35,6 +35,8 @@ CMD창에서 모든 작업이 이루어지며 입력값을 받아서 학습을 �
 
 7. 결과확인하기
 
+8. Pretrained Data : 추후 업데이트 예정 
+
 # 사용 가능한 모델
 1. ResNet
 2. VGGNet
@@ -85,4 +87,16 @@ Training
 Validation  
   Top-1 Accuracy : 69.832%  
   Top-5 Accuracy : 89.444%  
+  
+## 5. ResNet-101
+
+Training  
+  Top-1 Accuracy : 88.718%  
+  Top-5 Accuracy : 96.189%  
+
+Validation  
+  Top-1 Accuracy : 73.786%  
+  Top-5 Accuracy : 91.198%  
+  
+
 
