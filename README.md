@@ -97,6 +97,17 @@ Training
 Validation  
   Top-1 Accuracy : 73.786%  
   Top-5 Accuracy : 91.198%  
+
+## 6. ResNet-152
+
+Training  
+  Top-1 Accuracy : 90.764%  
+  Top-5 Accuracy : 96.794%  
+
+Validation  
+  Top-1 Accuracy : 74.050%  
+  Top-5 Accuracy : 91.294%  
+
   
 
 
