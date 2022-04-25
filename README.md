@@ -108,6 +108,12 @@ Validation
   Top-1 Accuracy : 74.050%  
   Top-5 Accuracy : 91.294%  
 
-  
+## 7. ResNet-50
 
+Training 
+  Top-1 Accuracy : 81.047%
+  Top-5 Accuracy : 93.785%
 
+Validation
+  Top-1 Accuracy : 70.143%
+  Top-5 Accuracy : 89.534%
