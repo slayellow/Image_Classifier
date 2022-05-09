@@ -464,9 +464,9 @@ class ImageClassifier:
 
         self.writer = SummaryWriter('runs/' + self.model.get_name())
 
-        dataiter = iter(self.train_loader)
-        source, target = dataiter.next()
-        self.writer.add_graph(self.model, source.to(self.dev))
+        # dataiter = iter(self.train_loader)
+        # source, target = dataiter.next()
+        # self.writer.add_graph(self.model, source.to(self.dev))
 
         for epoch in range(start_epoch, total_epcoh):
 
