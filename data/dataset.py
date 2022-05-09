@@ -40,10 +40,10 @@ class ImageNet:
             )
 
     def get_train_size(self):
-        return 0 if self.is_timm else len(self.train_dataset)
+        return len(self.train_dataset)
 
     def get_valid_size(self):
-        return 0 if self.is_timm else len(self.valid_dataset)
+        return len(self.valid_dataset)
 
     def get_train_loader(self, shuffle=True, batch_size=2, num_worker=0):
         if self.is_timm:
