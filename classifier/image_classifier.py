@@ -54,6 +54,11 @@ class ImageClassifier:
     def load_dataset(self):
         # GUI Option
         self.get_print_line()
+        self.get_print_request("Do you use timm??")
+        self.get_print_request("0 : Yes, 1 : No")
+        is_timm = True if int(input()) == 0 else False
+
+        self.get_print_line()
         self.get_print_request("Please enter the number")
         self.get_print_request("0 : GUI, 1 : No GUI")
         number = int(input())
@@ -85,7 +90,7 @@ class ImageClassifier:
 
             self.get_print_line()
             self.get_print_info("Load ImageNet Dataset!")
-            self.dataset = ImageNet(train_path, valid_path)
+            self.dataset = ImageNet(train_path, valid_path, is_timm=is_timm)
             self.get_print_info("Training Data Size : {}, Validation Data Size : {}".format(self.dataset.get_train_size(),
                                                                                             self.dataset.get_valid_size()))
             self.get_print_info("Load ImageNet Dataset Finish!!")
@@ -130,7 +135,7 @@ class ImageClassifier:
 
             self.get_print_line()
             self.get_print_info("Load ImageNet Dataset!")
-            self.dataset = ImageNet(train_path, valid_path)
+            self.dataset = ImageNet(train_path, valid_path, is_timm=is_timm)
             self.get_print_info(
                 "Training Data Size : {}, Validation Data Size : {}".format(self.dataset.get_train_size(),
                                                                             self.dataset.get_valid_size()))
