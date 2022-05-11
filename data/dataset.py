@@ -1,9 +1,8 @@
-from tarfile import is_tarfile
 from torch.utils.data import DataLoader
 import torchvision.transforms as transforms
 import torchvision.datasets as datasets
 
-from timm.data import ImageDataset, create_dataset, create_loader, resolve_data_config, Mixup, FastCollateMixup, AugMixDataset
+from timm.data import ImageDataset, create_loader
 
 
 class ImageNet:
@@ -15,7 +14,6 @@ class ImageNet:
 
         if is_timm:
             self.train_dataset = ImageDataset(self.train_path)
-            
             self.valid_dataset = ImageDataset(self.valid_path)
         else:
             normalization = transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
@@ -49,13 +47,10 @@ class ImageNet:
         if self.is_timm:
             return create_loader(self.train_dataset, input_size=(3, 224, 224), batch_size=batch_size, is_training=True, num_workers=num_worker, pin_memory=True, mean=(0.485, 0.456, 0.406), std=(0.229, 0.224, 0.225), worker_seeding=42)
         else:
-            return DataLoader(self.train_dataset, batch_size=batch_size, shuffle=shuffle, num_workers=num_worker,
-                          pin_memory=True, sampler=None)
+            return DataLoader(self.train_dataset, batch_size=batch_size, shuffle=shuffle, num_workers=num_worker, pin_memory=True, sampler=None)
 
     def get_valid_loader(self, shuffle=False, batch_size=2, num_worker=0):
         if self.is_timm:
             return create_loader(self.valid_dataset, input_size=(3, 224, 224), batch_size=batch_size, is_training=False, num_workers=num_worker, pin_memory=True, mean=(0.485, 0.456, 0.406), std=(0.229, 0.224, 0.225))
         else:
-            return DataLoader(self.valid_dataset, batch_size=batch_size, shuffle=shuffle, num_workers=num_worker,
-                          pin_memory=True, sampler=None)
-
+            return DataLoader(self.valid_dataset, batch_size=batch_size, shuffle=shuffle, num_workers=num_worker, pin_memory=True, sampler=None)

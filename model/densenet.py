@@ -2,7 +2,6 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from collections import OrderedDict
-import os
 
 
 # add_module : 이 함수를 통해 Layer의 이름을 설정할 수 있다.
@@ -65,7 +64,7 @@ class DenseNet(nn.Module):
             self.features.add_module('denseblock_%d' % (i + 1), block)
             self.inplanes = self.inplanes + repeat * growth_rate
             if i != len(blocks[layer_num]) - 1:
-                trans = Transition(in_channel= self.inplanes, out_channel=self.inplanes // 2)
+                trans = Transition(in_channel=self.inplanes, out_channel=self.inplanes // 2)
                 self.features.add_module('transition_%d' % (i + 1), trans)
                 self.inplanes = self.inplanes // 2
 
@@ -97,5 +96,3 @@ def densenet(layer_num, classes, pretrained=False, pretrained_path=None):
     if pretrained:
         model.load_state_dict(torch.load(pretrained_path)['state_dict'])
     return model
-
-

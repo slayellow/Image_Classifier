@@ -1,4 +1,3 @@
-import os
 import math
 import torch
 import torch.nn as nn
@@ -8,14 +7,14 @@ class InvertedBottleneck(nn.Module):
 
     def __init__(self, in_channel, out_channel, stride=1, downsample=None, expansion=1):
         super(InvertedBottleneck, self).__init__()
-        self.conv1 = nn.Conv2d(in_channel, in_channel*expansion, kernel_size=1, bias=False)
-        self.bn1 = nn.BatchNorm2d(in_channel*expansion)
+        self.conv1 = nn.Conv2d(in_channel, in_channel * expansion, kernel_size=1, bias=False)
+        self.bn1 = nn.BatchNorm2d(in_channel * expansion)
 
-        self.conv2 = nn.Conv2d(in_channel*expansion, in_channel*expansion, kernel_size=3, stride=stride,
-                               padding=1, bias=False, groups=in_channel*expansion)
-        self.bn2 = nn.BatchNorm2d(in_channel*expansion)
+        self.conv2 = nn.Conv2d(in_channel * expansion, in_channel * expansion, kernel_size=3, stride=stride,
+                               padding=1, bias=False, groups=in_channel * expansion)
+        self.bn2 = nn.BatchNorm2d(in_channel * expansion)
 
-        self.conv3 = nn.Conv2d(in_channel*expansion, out_channel, kernel_size=1, bias=False)
+        self.conv3 = nn.Conv2d(in_channel * expansion, out_channel, kernel_size=1, bias=False)
         self.bn3 = nn.BatchNorm2d(out_channel)
 
         self.relu = nn.ReLU6(inplace=True)

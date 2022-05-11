@@ -1,24 +1,25 @@
 from data.dataset import ImageNet
-from model.resnet import *
-from model.vggnet import *
-from model.densenet import *
-from model.ror import *
-from model.preactivation_resnet import *
-from model.resnext import *
-from model.convnext import *
-from model.mobilenet_v1 import *
-from model.senet import *
-from model.shufflenet_v1 import *
-from model.mobilenet_v2 import *
-from model.efficientnet_v1 import *
-from utils.color import *
-from utils.helper import *
-from model.utils.labelsmoothingcrossentropy import *
-from utils.scheduler import *
+from model.resnet import resnet
+from model.vggnet import vggnet
+from model.densenet import densenet
+from model.ror import ror
+from model.preactivation_resnet import preactivation_resnet
+from model.resnext import resnext
+from model.convnext import convnext
+from model.mobilenet_v1 import mobilenet_v1
+from model.senet import senet
+from model.shufflenet_v1 import shufflenet_v1
+from model.mobilenet_v2 import mobilenet_v2
+from model.efficientnet_v1 import efficientnet_v1
+from utils.color import Colors
+from utils.helper import save_checkpoint, accuracy, AverageMeter
+from model.utils.labelsmoothingcrossentropy import LabelSmoothingCrossEntropy
+from utils.scheduler import cosine_scheduler
 import tkinter
 from tkinter import filedialog
 import torchinfo
 import torch.optim as optim
+import torch
 import os
 import time
 import numpy as np
@@ -328,7 +329,7 @@ class ImageClassifier:
         self.get_print_request("0 : CrossEntropyLoss, 1 : LabelSmoothingCrossEntropy")
         number = int(input())
         if number == 0:
-            self.criterion = nn.CrossEntropyLoss().to(self.dev)
+            self.criterion = torch.nn.CrossEntropyLoss().to(self.dev)
             self.get_print_response("You Select Cross Entropy Loss")
         elif number == 1:
             self.get_print_response("You Select Label Smoothing Cross Entropy Loss")
@@ -545,9 +546,7 @@ class ImageClassifier:
                                     "Data {data_time.val:.3f} ({data_time.avg:.3f})\t"
                                     "Loss {loss.val:.4f} ({loss.avg:.4f})\t"
                                     "Prec@1 {top1.val:.3f} ({top1.avg:.3f})\t"
-                                    "Prec@5 {top5.val:.3f} ({top5.avg:.3f})\t".format(
-                    self.scheduler.get_last_lr(), epoch + 1, i, len(train_loader), batch_time=batch_time,
-                    data_time=data_time, loss=losses, top1=top1, top5=top5))
+                                    "Prec@5 {top5.val:.3f} ({top5.avg:.3f})\t".format(self.scheduler.get_last_lr(), epoch + 1, i, len(train_loader), batch_time=batch_time, data_time=data_time, loss=losses, top1=top1, top5=top5))
         self.training_accuracy_top1.append(top1.avg)
         self.training_accuracy_top5.append(top5.avg)
 
@@ -584,9 +583,7 @@ class ImageClassifier:
                                            'Time {batch_time.val:.3f} ({batch_time.avg:.3f})\t'
                                            'Loss {loss.val:.4f} ({loss.avg:.4f})\t'
                                            'Prec@1 {top1.val:.3f} ({top1.avg:.3f})\t'
-                                           'Prec@5 {top5.val:.3f} ({top5.avg:.3f})'.format(
-                        i, len(val_loader), batch_time=batch_time, loss=losses,
-                        top1=top1, top5=top5))
+                                           'Prec@5 {top5.val:.3f} ({top5.avg:.3f})'.format(i, len(val_loader), batch_time=batch_time, loss=losses, top1=top1, top5=top5))
 
         self.get_print_info(f' * Prec@1 {top1.avg:.3f} Prec@5 {top5.avg:.3f}')
         self.validation_accuracy_top1.append(top1.avg)

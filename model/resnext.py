@@ -1,4 +1,3 @@
-import os
 import math
 import torch
 import torch.nn as nn
@@ -133,4 +132,3 @@ def resnext(layer_num, classes, pretrained=False, pretrained_path=None):
     if pretrained:
         model.load_state_dict(torch.load(pretrained_path)['state_dict'])
     return model
-

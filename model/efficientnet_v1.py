@@ -1,4 +1,3 @@
-import os
 import math
 import torch
 from torch import nn
@@ -21,7 +20,7 @@ class Swish(nn.Module):
 class SEModule(nn.Module):
     def __init__(self, inplanes, se_ratio):
         super(SEModule, self).__init__()
-        hidden_dim = int(inplanes*se_ratio)
+        hidden_dim = int(inplanes * se_ratio)
         self.avg_pool = nn.AdaptiveAvgPool2d(1)
         self.fc1 = nn.Linear(inplanes, hidden_dim, bias=False)
         self.fc2 = nn.Linear(hidden_dim, inplanes, bias=False)
@@ -40,23 +39,23 @@ class SEModule(nn.Module):
 
 
 class Bottleneck(nn.Module):
-    def __init__(self,in_channel, out_channel, kernel_size, stride, expand, se_ratio, prob=1.0):
+    def __init__(self, in_channel, out_channel, kernel_size, stride, expand, se_ratio, prob=1.0):
         super(Bottleneck, self).__init__()
         if expand == 1:
-            self.conv2 = nn.Conv2d(in_channel*expand, in_channel*expand, kernel_size=kernel_size, stride=stride,
-                                   padding=kernel_size//2, groups=in_channel*expand, bias=False)
-            self.bn2 = nn.BatchNorm2d(in_channel*expand, momentum=0.01, eps=1e-3)
-            self.se = SEModule(in_channel*expand, se_ratio)
-            self.conv3 = nn.Conv2d(in_channel*expand, out_channel, kernel_size=1, bias=False)
+            self.conv2 = nn.Conv2d(in_channel * expand, in_channel * expand, kernel_size=kernel_size, stride=stride,
+                                   padding=kernel_size // 2, groups=in_channel * expand, bias=False)
+            self.bn2 = nn.BatchNorm2d(in_channel * expand, momentum=0.01, eps=1e-3)
+            self.se = SEModule(in_channel * expand, se_ratio)
+            self.conv3 = nn.Conv2d(in_channel * expand, out_channel, kernel_size=1, bias=False)
             self.bn3 = nn.BatchNorm2d(out_channel, momentum=0.01, eps=1e-3)
         else:
-            self.conv1 = nn.Conv2d(in_channel, in_channel*expand, kernel_size=1, bias=False)
-            self.bn1 = nn.BatchNorm2d(in_channel*expand, momentum=0.01, eps=1e-3)
-            self.conv2 = nn.Conv2d(in_channel*expand, in_channel*expand, kernel_size=kernel_size, stride=stride,
-                                   padding=kernel_size//2, groups=in_channel*expand, bias=False)
-            self.bn2 = nn.BatchNorm2d(in_channel*expand, momentum=0.01, eps=1e-3)
-            self.se = SEModule(in_channel*expand, se_ratio)
-            self.conv3 = nn.Conv2d(in_channel*expand, out_channel, kernel_size=1, bias=False)
+            self.conv1 = nn.Conv2d(in_channel, in_channel * expand, kernel_size=1, bias=False)
+            self.bn1 = nn.BatchNorm2d(in_channel * expand, momentum=0.01, eps=1e-3)
+            self.conv2 = nn.Conv2d(in_channel * expand, in_channel * expand, kernel_size=kernel_size, stride=stride,
+                                   padding=kernel_size // 2, groups=in_channel * expand, bias=False)
+            self.bn2 = nn.BatchNorm2d(in_channel * expand, momentum=0.01, eps=1e-3)
+            self.se = SEModule(in_channel * expand, se_ratio)
+            self.conv3 = nn.Conv2d(in_channel * expand, out_channel, kernel_size=1, bias=False)
             self.bn3 = nn.BatchNorm2d(out_channel, momentum=0.01, eps=1e-3)
 
         self.swish = Swish()
@@ -98,12 +97,12 @@ class MBConv(nn.Module):
         # not drop(stchastic depth)
         layer.append(Bottleneck(inplanes, planes, kernel_size, stride, expand, se_ratio))
 
-        for l in range(1, repeat):
+        for iter in range(1, repeat):
             if count_layer is None:
                 layer.append(Bottleneck(planes, planes, kernel_size, 1, expand, se_ratio))
             else:
                 # stochastic depth
-                prob = 1.0 - (count_layer + l) / sum_layer * (1 - pl)
+                prob = 1.0 - (count_layer + iter) / sum_layer * (1 - pl)
                 layer.append(Bottleneck(planes, planes, kernel_size, 1, expand, se_ratio, prob=prob))
 
         self.layer = nn.Sequential(*layer)
@@ -123,8 +122,9 @@ class Upsample(nn.Module):
 
 
 class Flatten(nn.Module):
-    def __init(self):
+    def __init__(self):
         super(Flatten, self).__init__()
+
     def forward(self, x):
         return x.view(x.size(0), -1)
 
@@ -156,8 +156,8 @@ class EfficientNet_V1(nn.Module):
         dropout_ratio = params[version][3]
         se_ratio = 0.25
         pl = 0.8
-        channels = [round(x*width) for x in channels]
-        repeats = [round(x*depth) for x in repeats]
+        channels = [round(x * width) for x in channels]
+        repeats = [round(x * depth) for x in repeats]
 
         sum_layer = sum(repeats)
 

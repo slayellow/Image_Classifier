@@ -1,11 +1,8 @@
-
 import math
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from torch.autograd import Variable
 from collections import OrderedDict
-from torch.nn import init
 
 
 def conv3x3(in_channels, out_channels, stride=1, padding=1, bias=False, groups=1):
@@ -43,12 +40,6 @@ class ShuffleUnit(nn.Module):
             self.depthwise_stride = 2
             self._combine_func = self._concat
             self.out_channels -= self.in_channels
-        else:
-            raise ValueError("Cannot combine tensors with \"{}\"" \
-                             "Only \"add\" and \"concat\" are" \
-                             "supported".format(self.combine))
-
-        self.first_1x1_groups = self.groups if grouped_conv else 1
 
         self.g_conv_1x1_compress = self._make_grouped_conv1x1(
             self.in_channels,

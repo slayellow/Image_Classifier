@@ -1,4 +1,3 @@
-import os
 import math
 import torch
 import torch.nn as nn
@@ -12,21 +11,21 @@ class VGGNet(nn.Module):
         self.model_name = 'VGGNet_{}'.format(layer_num)
         self.layer_num = layer_num
 
-        ### Block1
+        # Block1
         self.block1_conv1 = nn.Conv2d(3, 64, kernel_size=3, stride=1, padding=1)
         self.block1_relu1 = nn.ReLU(True)
         self.block1_conv2 = nn.Conv2d(64, 64, kernel_size=3, stride=1, padding=1)
         self.block1_relu2 = nn.ReLU(True)
         self.block1_mpool = nn.MaxPool2d(kernel_size=2, stride=2)
 
-        ### Block2
+        # Block2
         self.block2_conv1 = nn.Conv2d(64, 128, kernel_size=3, stride=1, padding=1)
         self.block2_relu1 = nn.ReLU(True)
         self.block2_conv2 = nn.Conv2d(128, 128, kernel_size=3, stride=1, padding=1)
         self.block2_relu2 = nn.ReLU(True)
         self.block2_mpool = nn.MaxPool2d(kernel_size=2, stride=2)
 
-        ### Block3
+        # Block3
         self.block3_conv1 = nn.Conv2d(128, 256, kernel_size=3, stride=1, padding=1)
         self.block3_relu1 = nn.ReLU(True)
         self.block3_conv2 = nn.Conv2d(256, 256, kernel_size=3, stride=1, padding=1)
@@ -37,7 +36,7 @@ class VGGNet(nn.Module):
         self.block3_relu4 = nn.ReLU(True)
         self.block3_mpool = nn.MaxPool2d(kernel_size=2, stride=2)
 
-        ### Block4
+        # Block4
         self.block4_conv1 = nn.Conv2d(256, 512, kernel_size=3, stride=1, padding=1)
         self.block4_relu1 = nn.ReLU(True)
         self.block4_conv2 = nn.Conv2d(512, 512, kernel_size=3, stride=1, padding=1)
@@ -48,7 +47,7 @@ class VGGNet(nn.Module):
         self.block4_relu4 = nn.ReLU(True)
         self.block4_mpool = nn.MaxPool2d(kernel_size=2, stride=2)
 
-        ### Block5
+        # Block5
         self.block5_conv1 = nn.Conv2d(512, 512, kernel_size=3, stride=1, padding=1)
         self.block5_relu1 = nn.ReLU(True)
         self.block5_conv2 = nn.Conv2d(512, 512, kernel_size=3, stride=1, padding=1)
@@ -90,7 +89,7 @@ class VGGNet(nn.Module):
             x = self.block1_relu2(x)
         x = self.block1_mpool(x)
 
-        ### Block2
+        # Block2
         x = self.block2_conv1(x)
         x = self.block2_relu1(x)
         if self.layer_num == 13 or self.layer_num == 16 or self.layer_num == 19:
@@ -98,7 +97,7 @@ class VGGNet(nn.Module):
             x = self.block2_relu2(x)
         x = self.block2_mpool(x)
 
-        ### Block3
+        # Block3
         x = self.block3_conv1(x)
         x = self.block3_relu1(x)
         x = self.block3_conv2(x)
@@ -111,7 +110,7 @@ class VGGNet(nn.Module):
             x = self.block3_relu4(x)
         x = self.block3_mpool(x)
 
-        ### Block4
+        # Block4
         x = self.block4_conv1(x)
         x = self.block4_relu1(x)
         x = self.block4_conv2(x)
@@ -124,7 +123,7 @@ class VGGNet(nn.Module):
             x = self.block4_relu4(x)
         x = self.block4_mpool(x)
 
-        ### Block5
+        # Block5
         x = self.block5_conv1(x)
         x = self.block5_relu1(x)
         x = self.block5_conv2(x)
